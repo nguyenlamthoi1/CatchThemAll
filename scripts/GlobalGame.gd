@@ -77,6 +77,8 @@ func _load_my_res():
 			if USE_RANDOM_STATS:
 				var rand_stat_arr = _get_rand_stats_array(card_data.type)
 				card_data.random_stats = rand_stat_arr
+				
+			card_data.use_random = USE_RANDOM_STATS
 			# Test
 			#print(CARD_DICT[card_type][i].name + " Stat_arr: " + str(CARD_DICT[card_type][i].random_stats) )
 

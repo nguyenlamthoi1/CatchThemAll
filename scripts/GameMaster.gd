@@ -1,10 +1,23 @@
 extends Node
 
+var CardTemp = preload("res://scenes/Card.tscn")
+
 var game_mode = GlobalGame.GAME_MODE.PVP
 
 var _current_player
 var _deck = []
 var _card_dict = []
+
+onready var _players = {
+	"0": $VBoxContainer/Player2, # Player at bottom screen
+	"1": $VBoxContainer/Player1, # Player at top screen
+}
+onready var _draw_pos = $DrawPosition
+
+
+
+const P1 = "0"
+const P2 = "1"
 
 var rng = RandomNumberGenerator.new()
 
@@ -67,8 +80,21 @@ func _prepair_deck():
 		num_2 = num_2 + 1 if _deck[i].type == 2 else num_2 
 	print("[Deck] total = " + str(_deck.size()) + " - " + str(num_0)+ "," +  str(num_1)+ "," +  str(num_2)+ ",")
 	# --
-	
-	
 		
 func _start_pvp_game():
-	pass
+	_players[P1].init_player(P1, "Player 1", GlobalGame.GAME_MODE.PVP)
+	_players[P2].init_player(P2, "Player 2", GlobalGame.GAME_MODE.PVP)
+	
+	for player_id in _players:
+		# create new card
+		var drawn_card_data = _deck.pop_back()
+		var new_card = CardTemp.instance()
+		new_card.init_card(drawn_card_data, player_id)
+		
+		var cur_player = _players[player_id]
+		
+		
+	
+	
+
+	
