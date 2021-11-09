@@ -8,13 +8,22 @@ var _current_player
 var _deck = []
 var _card_dict = []
 
+var _cur_time := 0.0
+var _max_time_turn := 0.0
+var _time_ready := 2.0
+var _state_game = 0
+
+const GAME_PAUSED = 0
+const GAME_RUN = 1
+const GAME_READY = 2
+
 onready var _players = {
 	"0": $VBoxContainer/Player2, # Player at bottom screen
 	"1": $VBoxContainer/Player1, # Player at top screen
 }
 onready var _draw_pos = $DrawPosition
-
-
+onready var _time_count = $TimeCount
+onready var _gui_text = $GuiText
 
 const P1 = "0"
 const P2 = "1"
@@ -25,10 +34,43 @@ func _ready():
 	print("[Main Game] ready!")
 	rng.randomize()
 	
+	_players[P1].init_player(P1, "Player 1", GlobalGame.GAME_MODE.PVP)
+	_players[P2].init_player(P2, "Player 2", GlobalGame.GAME_MODE.PVP)
+	
 	_deck = []
 	_card_dict = GlobalGame.CARD_DICT
+	_max_time_turn = GlobalGame.PLAYER_TURN_TIME
+	_cur_time = _time_ready
 	
-	start_game(GlobalGame.GAME_MODE.PVP)
+	
+	_state_game = GAME_READY
+	
+	_gui_text.start_show("Start game")
+	#start_game(GlobalGame.GAME_MODE.PVP)
+
+func _process(delta):
+	if _state_game == GAME_PAUSED:
+		return
+	elif _state_game == GAME_READY:
+		_cur_time = _cur_time - delta
+		#print("cur_time" + str(_cur_time))
+		if _cur_time <= 0:
+			_cur_time = _max_time_turn
+			_state_game == GAME_RUN
+			print("start_game")
+			start_game(GlobalGame.GAME_MODE.PVP)
+	elif _state_game == GAME_RUN:
+		_cur_time = _cur_time - delta
+		if _cur_time <= 0 :
+			_cur_time = _max_time_turn
+			_switch_turn()
+	
+	
+	if _state_game == GAME_RUN:
+		_time_count.text = str(round(_cur_time))
+	
+	_time_count.text = str(round(_cur_time))
+	
 
 func start_game(mode):
 	game_mode = mode
@@ -82,19 +124,39 @@ func _prepair_deck():
 	# --
 		
 func _start_pvp_game():
-	_players[P1].init_player(P1, "Player 1", GlobalGame.GAME_MODE.PVP)
-	_players[P2].init_player(P2, "Player 2", GlobalGame.GAME_MODE.PVP)
+
 	
 	for player_id in _players:
 		var cur_player = _players[player_id]
 		if !cur_player.is_full_hand():		
-			# create new card
-			var drawn_card_data = _deck.pop_back()
-			var new_card = CardTemp.instance()
-			new_card.init_card(drawn_card_data, player_id)
-			cur_player.draw_card(_draw_pos, new_card)
+			_do_deal_card(player_id)
+	
+	var random_first_id = str(rng.randi_range(0, 1))
+	_current_player = _players[random_first_id]
+	_state_game = GAME_RUN
 		
+func _do_deal_card(player_id):
+	var cur_player = _players[player_id]
+	
+	# create new card
+	var drawn_card_data = _deck.pop_back()
+	var new_card = CardTemp.instance()
+	new_card.init_card(drawn_card_data, player_id)
+	cur_player.draw_card(_draw_pos, new_card)
+	
+func _switch_turn():
+	print("test curret: ", _current_player.id, "- ", P1, " - ", P2)
+	var new_turn_id = -1
+	if _current_player.id == P1:
+		new_turn_id = P2
+	else:
+		new_turn_id = P1
 		
+	_current_player = _players[new_turn_id]
+	var msg = "Turn of\n" + _current_player.name
+	print("switch_turn ",new_turn_id)
+	
+	_gui_text.start_show(msg)
 	
 	
 

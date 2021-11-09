@@ -25,14 +25,15 @@ var _tween
 var _card_data = {}
 
 func init_card(card_data, owner):
-	var _frame = $Background/Frame
-	var _image = $Background/Sprite
-	var _background = $Background
-	var _left = $Background/Left
-	var _top = $Background/Top	
-	var _right = $Background/Right
-	var _bottom = $Background/Bottom
-	var _tween = $Tween
+	_frame = $Background/Frame
+	_image = $Background/Sprite
+	_background = $Background
+	_left = $Background/Left
+	_top = $Background/Top	
+	_right = $Background/Right
+	_bottom = $Background/Bottom
+	_tween = $Tween
+	
 	_card_data = card_data
 	
 	# frame

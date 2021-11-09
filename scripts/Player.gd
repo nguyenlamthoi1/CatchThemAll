@@ -9,6 +9,8 @@ var id = 0
 var max_hand = 4
 var card_slots = []
 
+onready var player_info = $PlayerSecondInfo/PlayerInfo
+
 
 func init_player(p_id, p_name, p_mode):
 	id = p_id
@@ -22,6 +24,12 @@ func init_player(p_id, p_name, p_mode):
 	for i in range(slots_children.size()):
 		var slot = slots_children[i]
 		card_slots.append(slot)
+		
+	#player_info = $PlayerSecondInfo/PlayerInfo
+	
+	update_name(player_name)
+	update_score(score)
+	
 
 func draw_card(from_node, card_instance):
 	var empty_slot = _get_first_empty_slot()
@@ -31,7 +39,7 @@ func draw_card(from_node, card_instance):
 	empty_slot.add_child(card_instance)
 	hand.append(card_instance)
 	#card_instance.global_position = empty_slot.global_position
-	card_instance.move_from_to(from_node.rect_global_position , empty_slot.global_position)
+	card_instance.move_from_to(from_node.global_position , empty_slot.rect_global_position)
 
 func _get_first_empty_slot():
 	var slot_found = null
@@ -46,3 +54,17 @@ func _get_first_empty_slot():
 func is_full_hand():
 	return hand.size() >= max_hand
 			
+
+func update_name(pname):
+	var name_label = player_info.get_node("NameBackground/NameLabel")
+	name_label.text = pname
+	name = pname
+	
+	
+func update_score(pscore):
+	var score_label = player_info.get_node("ScoreCounter/ScoreLabel")
+	var children = player_info.get_children()
+	for i in range(children.size()):
+		print("test_name_child: ",children[i].name)
+	score_label.text = str(pscore)	
+	score = pscore
