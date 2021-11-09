@@ -12,6 +12,8 @@ const BG_IMG = {
 	"2": preload("res://assets/gui/yellow_background-export.png")
 }
 
+var holdable = false
+
 #var _frames = preload("")
 var _frame
 var _image
@@ -50,6 +52,10 @@ func init_card(card_data, owner):
 	_bottom.text = str(_card_data.random_stats[3]) if use_random_stats else str(_card_data.stats[3])
 
 func move_from_to(from_pos, to_pos):
-	print("test_move", _card_data.name, " from_pos: ", str(from_pos), " - ", str(to_pos))
+	holdable = false
 	_tween.interpolate_property(self, "global_position", from_pos, to_pos, 0.8)
 	_tween.start()
+
+
+func _on_Tween_tween_completed(object, key):
+	holdable = true

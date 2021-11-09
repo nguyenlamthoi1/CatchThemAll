@@ -24,6 +24,7 @@ onready var _players = {
 onready var _draw_pos = $DrawPosition
 onready var _time_count = $TimeCount
 onready var _gui_text = $GuiText
+onready var _board_ui = $VBoxContainer/BoardContainer
 
 const P1 = "0"
 const P2 = "1"
@@ -42,6 +43,7 @@ func _ready():
 	_max_time_turn = GlobalGame.PLAYER_TURN_TIME
 	_cur_time = _time_ready
 	
+	_board_ui.init_board()
 	
 	_state_game = GAME_READY
 	
@@ -157,6 +159,9 @@ func _switch_turn():
 	print("switch_turn ",new_turn_id)
 	
 	_gui_text.start_show(msg)
+	
+	_do_deal_card(P1)
+	_do_deal_card(P2)
 	
 	
 

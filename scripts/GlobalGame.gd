@@ -5,6 +5,7 @@ const ROWS: int = 4
 const RULE_GAME_SIZE: int = 4
 const MAX_HAND_CARD: int = 4
 const PLAYER_TURN_TIME: float = 5.0
+const NUM_EFF_AREA = 4
 
 const GAME_MODE = {
 	PVP = 0,
