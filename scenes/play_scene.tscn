@@ -82,32 +82,32 @@ margin_bottom = 41.0
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
-[node name="CardSlot" type="MarginContainer" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer"]
+[node name="CardSlot0" type="MarginContainer" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer"]
 margin_right = 32.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_vertical = 0
 
-[node name="Holder" type="TextureRect" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot"]
+[node name="Holder" type="TextureRect" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot0"]
 margin_right = 32.0
 margin_bottom = 32.0
 texture = ExtResource( 2 )
 expand = true
 
-[node name="CardSlot2" type="MarginContainer" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer"]
+[node name="CardSlot1" type="MarginContainer" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer"]
 margin_left = 36.0
 margin_right = 68.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_vertical = 0
 
-[node name="Holder" type="TextureRect" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot2"]
+[node name="Holder" type="TextureRect" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot1"]
 margin_right = 32.0
 margin_bottom = 32.0
 texture = ExtResource( 2 )
 expand = true
 
-[node name="Card2" type="MarginContainer" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot2/Holder"]
+[node name="Card2" type="MarginContainer" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot1/Holder"]
 margin_left = -45.0
 margin_top = 96.0
 margin_right = -45.0
@@ -117,11 +117,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Background" type="TextureRect" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot2/Holder/Card2"]
+[node name="Background" type="TextureRect" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot1/Holder/Card2"]
 texture = ExtResource( 8 )
 expand = true
 
-[node name="Image" type="TextureRect" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot2/Holder/Card2/Background"]
+[node name="Image" type="TextureRect" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot1/Holder/Card2/Background"]
 visible = false
 margin_right = 32.0
 margin_bottom = 32.0
@@ -131,12 +131,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Sprite" type="Sprite" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot2/Holder/Card2/Background"]
+[node name="Sprite" type="Sprite" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot1/Holder/Card2/Background"]
 position = Vector2( 13, 13 )
 scale = Vector2( 0.25, 0.25 )
 texture = ExtResource( 12 )
 
-[node name="Frame" type="NinePatchRect" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot2/Holder/Card2/Background"]
+[node name="Frame" type="NinePatchRect" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot1/Holder/Card2/Background"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -1.0
@@ -152,27 +152,27 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CardSlot3" type="MarginContainer" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer"]
+[node name="CardSlot2" type="MarginContainer" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer"]
 margin_left = 72.0
 margin_right = 104.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_vertical = 0
 
-[node name="Holder" type="TextureRect" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot3"]
+[node name="Holder" type="TextureRect" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot2"]
 margin_right = 32.0
 margin_bottom = 32.0
 texture = ExtResource( 2 )
 expand = true
 
-[node name="CardSlot4" type="MarginContainer" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer"]
+[node name="CardSlot3" type="MarginContainer" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer"]
 margin_left = 108.0
 margin_right = 140.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_vertical = 0
 
-[node name="Holder" type="TextureRect" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot4"]
+[node name="Holder" type="TextureRect" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot3"]
 margin_right = 32.0
 margin_bottom = 32.0
 texture = ExtResource( 2 )

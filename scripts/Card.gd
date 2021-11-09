@@ -7,24 +7,32 @@ const COLOR_P1 = Color("#434aff")
 const COLOR_P2 = Color("#cd2e26")
 
 const BG_IMG = {
-	"LEVEL_0": preload("res://assets/gui/green_background.png"),
-	"LEVEL_1": preload("res://assets/gui/blue_background.png"),
-	"LEVEL_2": preload("res://assets/gui/yellow_background-export.png")
+	"0": preload("res://assets/gui/green_background.png"),
+	"1": preload("res://assets/gui/blue_background.png"),
+	"2": preload("res://assets/gui/yellow_background-export.png")
 }
 
 #var _frames = preload("")
-onready var _frame = $Background/Frame
-onready var _image = $Background/Sprite
-onready var _background = $Background
-onready var _left = $Background/Left
-onready var _top = $Background/Top
-onready var _right = $Background/Right
-onready var _bottom = $Background/Bottom
-onready var _tween = $Tween
+var _frame
+var _image
+var _background
+var _left
+var _top
+var _right
+var _bottom
+var _tween
 
 var _card_data = {}
 
 func init_card(card_data, owner):
+	var _frame = $Background/Frame
+	var _image = $Background/Sprite
+	var _background = $Background
+	var _left = $Background/Left
+	var _top = $Background/Top	
+	var _right = $Background/Right
+	var _bottom = $Background/Bottom
+	var _tween = $Tween
 	_card_data = card_data
 	
 	# frame
@@ -32,7 +40,7 @@ func init_card(card_data, owner):
 	# image
 	_image.texture = _card_data.img
 	# background
-	_background.texture = BG_IMG[_card_data.type]
+	_background.texture = BG_IMG[str(_card_data.type)]
 	# stats
 	var use_random_stats = _card_data.use_random
 	_left.text = str(_card_data.random_stats[0]) if use_random_stats else str(_card_data.stats[0])
@@ -41,4 +49,6 @@ func init_card(card_data, owner):
 	_bottom.text = str(_card_data.random_stats[3]) if use_random_stats else str(_card_data.stats[3])
 
 func move_from_to(from_pos, to_pos):
+	print("test_move", _card_data.name, " from_pos: ", str(from_pos), " - ", str(to_pos))
 	_tween.interpolate_property(self, "global_position", from_pos, to_pos, 0.8)
+	_tween.start()

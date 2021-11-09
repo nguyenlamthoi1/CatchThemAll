@@ -86,12 +86,13 @@ func _start_pvp_game():
 	_players[P2].init_player(P2, "Player 2", GlobalGame.GAME_MODE.PVP)
 	
 	for player_id in _players:
-		# create new card
-		var drawn_card_data = _deck.pop_back()
-		var new_card = CardTemp.instance()
-		new_card.init_card(drawn_card_data, player_id)
-		
 		var cur_player = _players[player_id]
+		if !cur_player.is_full_hand():		
+			# create new card
+			var drawn_card_data = _deck.pop_back()
+			var new_card = CardTemp.instance()
+			new_card.init_card(drawn_card_data, player_id)
+			cur_player.draw_card(_draw_pos, new_card)
 		
 		
 	
