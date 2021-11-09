@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 
 const P1 = "0"
 const P2 = "1"
@@ -13,6 +13,12 @@ const BG_IMG = {
 }
 
 var holdable = false
+var hold_enter = false
+var touch_pos = Vector2()
+var delta_x
+var delta_y
+var new_delta_x
+var new_delta_y
 
 #var _frames = preload("")
 var _frame
@@ -59,3 +65,23 @@ func move_from_to(from_pos, to_pos):
 
 func _on_Tween_tween_completed(object, key):
 	holdable = true
+
+
+func _on_Area2D_input_event(viewport, event, shape_idx):
+	if true:
+		hold_enter = true
+		if event is InputEventMouseButton :
+			
+		#if event is InputEventScreenTouch and event.is_pressed():
+			print("touch_on_screen")
+			
+			#touch_pos = event.set_position()
+			#delta_x = touch_pos.x - position.x
+			#delta_y = touch_pos.y - position.y
+		#if event is InputEventScreenDrag:
+			#touch_pos = event.set_position()
+			#new_delta_x = touch_pos.x - delta_x
+			#new_delta_y = touch_pos.y - delta_y
+			#position = Vector2(new_delta_x, new_delta_y)
+		
+			
