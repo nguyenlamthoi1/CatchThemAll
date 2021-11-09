@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/alakazam-f.png-76281494f19ea5b280e42d961ec1fef6.stex"
+path="res://.import/scyther.png-54e58382fffb00691e9da67caef320aa.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/pokemons/alakazam-f.png"
-dest_files=[ "res://.import/alakazam-f.png-76281494f19ea5b280e42d961ec1fef6.stex" ]
+source_file="res://assets/pokemons/scyther.png"
+dest_files=[ "res://.import/scyther.png-54e58382fffb00691e9da67caef320aa.stex" ]
 
 [params]
 
@@ -28,7 +28,6 @@ process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
-process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=true

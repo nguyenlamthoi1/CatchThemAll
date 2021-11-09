@@ -1,8 +1,49 @@
-[gd_scene format=2]
+[gd_scene load_steps=5 format=2]
 
-[node name="Control" type="Control"]
+[ext_resource path="res://assets/pokemons/charizard.png" type="Texture" id=2]
+[ext_resource path="res://assets/gui/green_background.png" type="Texture" id=3]
+[ext_resource path="res://assets/pokemons/scyther.png" type="Texture" id=4]
+[ext_resource path="res://assets/gui/card_ui1.png" type="Texture" id=5]
+
+[node name="Card" type="Node2D"]
+
+[node name="Background" type="TextureRect" parent="."]
+margin_right = 26.0
+margin_bottom = 26.0
+texture = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Image" type="TextureRect" parent="Background"]
+visible = false
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 2 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="Background"]
+position = Vector2( 13, 13 )
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 4 )
+
+[node name="Frame" type="NinePatchRect" parent="Background"]
+modulate = Color( 0.262745, 0.290196, 1, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = -1.0
+margin_top = -1.0
+margin_right = 1.0
+margin_bottom = 1.0
+texture = ExtResource( 5 )
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
 __meta__ = {
 "_edit_use_anchors_": false
 }

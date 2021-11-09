@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/player_empty_card_slot.png-50cda89de71a0cd5325bc11be8df821b.stex"
+path="res://.import/alakazam.png-4f219116f6a1887ec9c559e632c43297.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/gui/player_empty_card_slot.png"
-dest_files=[ "res://.import/player_empty_card_slot.png-50cda89de71a0cd5325bc11be8df821b.stex" ]
+source_file="res://assets/pokemons/alakazam.png"
+dest_files=[ "res://.import/alakazam.png-4f219116f6a1887ec9c559e632c43297.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
