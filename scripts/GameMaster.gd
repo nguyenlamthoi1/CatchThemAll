@@ -46,6 +46,7 @@ func _ready():
 	_cur_time = _time_ready
 	
 	_board_ui.init_board()
+	_board_ui.gm = self
 	
 	_state_game = GAME_READY
 	
@@ -69,7 +70,8 @@ func _process(delta):
 			_cur_time = _max_time_turn
 			_switch_turn()
 	elif _state_game == GAME_OVER:
-		print("Game over!")
+		pass
+		#print("Game over!")
 	
 	
 	if _state_game == GAME_RUN:
@@ -169,11 +171,16 @@ func _switch_turn():
 		_do_deal_card(new_turn_id)
 	else:
 		_state_game = GAME_OVER
+		print("Game over: out of deck")
 		
 
-func _on_card_drop(player_id, pos):
-	_board_ui.on_card_drop(player_id, pos)
+func _on_card_drop(player_id, drop_card, pos):
+	_board_ui.on_card_drop(player_id, drop_card, pos)
 	
+
+
+func get_player(player_id):
+	return _players[player_id]
 
 	
 	

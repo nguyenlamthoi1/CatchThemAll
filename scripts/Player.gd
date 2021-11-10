@@ -71,9 +71,9 @@ func _get_first_empty_slot_2():
 	found_index = 0
 	for i in range(hand.size()):
 		var card = hand[i]
-		print("test_card ", i, card == null)
+		#print("test_card ", i, card == null)
 		if card == null:
-			print("FOUND_CARD_", i)
+			#print("FOUND_CARD_", i)
 			found_index = i
 			break
 		
@@ -91,9 +91,7 @@ func _get_first_hand_idx():
 	
 	for i in range(hand.size()):
 		var card = hand[i]
-		print("test_card ", i, card == null)
 		if card == null:
-			print("FOUND_CARD_", i)
 			found_index = i
 			break
 		
@@ -111,8 +109,5 @@ func update_name(pname):
 	
 func update_score(pscore):
 	var score_label = player_info.get_node("ScoreCounter/ScoreLabel")
-	var children = player_info.get_children()
-	for i in range(children.size()):
-		print("test_name_child: ",children[i].name)
 	score_label.text = str(pscore)	
 	score = pscore

@@ -7,6 +7,11 @@ const MAX_HAND_CARD: int = 4
 const PLAYER_TURN_TIME: float = 5.0
 const NUM_EFF_AREA = 4
 
+const P1 = "0"
+const P2 = "1"
+
+enum {LEFT, TOP, RIGHT, BOTTOM}
+
 const GAME_MODE = {
 	PVP = 0,
 	AI_RANDOM = 1,

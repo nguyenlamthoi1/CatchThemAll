@@ -47,7 +47,7 @@ var stats = [0, 0, 0, 0]
 var eff_num = 0
 var _card_data = {}
 
-func init_card(card_data, owner):
+func init_card(card_data, owner_id):
 	_frame = $Background/Frame
 	_image = $Background/Sprite
 	_background = $Background
@@ -60,7 +60,7 @@ func init_card(card_data, owner):
 	_card_data = card_data
 	
 	# frame
-	_frame.modulate = COLOR_P1 if owner == P1 else COLOR_P2
+	_frame.modulate = COLOR_P1 if owner_id == P1 else COLOR_P2
 	# image
 	_image.texture = _card_data.img
 	# background
@@ -131,7 +131,7 @@ func _on_TouchScreenButton_released():
 		card_owner.hand_num -= 1
 		if card_owner.hand_num < 0: card_owner.hand_num = 0
 		# notify for game_master
-		gm._on_card_drop(card_owner.id, pos)
+		gm._on_card_drop(card_owner.id, self, pos)
 	
 func _input(event):
 	if holding and !on_slot:
@@ -160,7 +160,10 @@ func unset_can_drop():
 
 func update_stats(p_eff_num):
 	eff_num = p_eff_num
-	stats[0] += eff_num
+	
+	var old_stat = stats[0]	
+	stats[0] += eff_num		
+	
 	stats[1] += eff_num
 	stats[2] += eff_num
 	stats[3] += eff_num
@@ -168,4 +171,19 @@ func update_stats(p_eff_num):
 	_top.text = str(stats[1])
 	_right.text = str(stats[2])
 	_bottom.text = str(stats[3])
+	
+	if old_stat < stats[0]:
+		_left.modulate = Color.green
+		_top.modulate = Color.green
+		_right.modulate = Color.green
+		_bottom.modulate = Color.green
+	if old_stat > stats[0]:
+		_left.modulate = Color.red
+		_top.modulate = Color.red
+		_right.modulate = Color.red
+		_bottom.modulate = Color.red
+
+func update_owner(p_player):
+	_frame.modulate = COLOR_P1 if p_player.id == P1 else COLOR_P2
+	card_owner = p_player
 	

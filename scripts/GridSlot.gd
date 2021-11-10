@@ -13,6 +13,8 @@ var effect_num = 0
 var type = EMPTY_TYPE
 var pos = Vector2(0, 0)
 
+var grid_owner = null
+
 var _drag_card = null
 
 onready var selected_area = $SelectedArea
@@ -71,3 +73,12 @@ func _on_Area2D_area_exited(area):
 
 func get_drag_card():
 	return _drag_card
+	
+func get_hold_card():
+	if _drag_card == null: # try find child of holder node
+		for i in range(get_child_count()):
+			var child = get_child(i)
+			if child.name == "Card":
+				_drag_card = child
+	return _drag_card
+		
