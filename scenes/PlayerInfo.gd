@@ -10,7 +10,6 @@ func update_name(name):
 	name_label.text = name
 	name = _name
 	
-	
 func update_score(score):
 	score_label.text = str(score)	
 	_score = score

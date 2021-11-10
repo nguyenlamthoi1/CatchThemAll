@@ -145,7 +145,9 @@ func _start_pvp_game():
 		
 func _do_deal_card(player_id):
 	var cur_player = _players[player_id]
-	
+	if cur_player.is_full_hand():
+		return
+		
 	# create new card
 	var drawn_card_data = _deck.pop_back()
 	var new_card = CardTemp.instance()
@@ -172,17 +174,28 @@ func _switch_turn():
 	else:
 		_state_game = GAME_OVER
 		print("Game over: out of deck")
-		
 
 func _on_card_drop(player_id, drop_card, pos):
+	# do drop card on board
 	_board_ui.on_card_drop(player_id, drop_card, pos)
+	# check if board is full
+	if _board_ui.is_full():
+		print("Game over: found winner!")
+		_state_game = GAME_OVER		
 	
-
-
 func get_player(player_id):
 	return _players[player_id]
 
+func get_opponent(player_id):
+	var opponent_id = P1 if player_id == P2 else P2
+	return _players[opponent_id]
 	
+func get_opponent_id(player_id):
+	return P1 if player_id == P2 else P2
 	
-
+func update_score_from_board():
+	for player_id in _players:
+		var new_score = _board_ui.player_scores[player_id]
+		var player = _players[player_id]
+		player.update_score(new_score)		
 	

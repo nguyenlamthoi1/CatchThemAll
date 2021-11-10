@@ -106,7 +106,6 @@ func update_name(pname):
 	name_label.text = pname
 	name = pname
 	
-	
 func update_score(pscore):
 	var score_label = player_info.get_node("ScoreCounter/ScoreLabel")
 	score_label.text = str(pscore)	
