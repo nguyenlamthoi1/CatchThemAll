@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scripts/Card.gd" type="Script" id=1]
 [ext_resource path="res://assets/pokemons/charizard.png" type="Texture" id=2]
@@ -6,6 +6,12 @@
 [ext_resource path="res://assets/pokemons/scyther.png" type="Texture" id=4]
 [ext_resource path="res://assets/gui/card_ui1.png" type="Texture" id=5]
 [ext_resource path="res://assets/fonts/chubby-choo-regular.ttf" type="DynamicFontData" id=6]
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 13, 14 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 13, 13 )
 
 [sub_resource type="DynamicFont" id=1]
 size = 8
@@ -19,11 +25,19 @@ font_data = ExtResource( 6 )
 size = 8
 font_data = ExtResource( 6 )
 
-[sub_resource type="RectangleShape2D" id=4]
-extents = Vector2( 13, 14 )
-
-[node name="Card" type="Node2D"]
+[node name="Card" type="Area2D" groups=[
+"Card",
+]]
 script = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 13, 13 )
+shape = SubResource( 4 )
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="."]
+shape = SubResource( 5 )
+
+[node name="Tween" type="Tween" parent="."]
 
 [node name="Background" type="TextureRect" parent="."]
 margin_right = 26.0
@@ -136,13 +150,5 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Tween" type="Tween" parent="."]
-
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2( 13, 13 )
-shape = SubResource( 4 )
-
-[connection signal="tween_completed" from="Tween" to="." method="_on_Tween_tween_completed"]
-[connection signal="input_event" from="Area2D" to="." method="_on_Area2D_input_event"]
+[connection signal="pressed" from="TouchScreenButton" to="." method="_on_TouchScreenButton_pressed"]
+[connection signal="released" from="TouchScreenButton" to="." method="_on_TouchScreenButton_released"]

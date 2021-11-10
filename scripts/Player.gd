@@ -42,10 +42,11 @@ func draw_card(from_node, card_instance):
 		
 	var empty_slot = card_slots[found_empty_idx]
 	empty_slot.add_child(card_instance)
+	card_instance.idx_in_hand = found_empty_idx
+	card_instance.card_owner = self
 	
 	hand[found_empty_idx] = card_instance
-	hand_num += 1
-	print("ADD_CARD_",hand.size())
+	hand_num += 1.0
 	#card_instance.global_position = empty_slot.global_position
 	card_instance.move_from_to(from_node.global_position , empty_slot.rect_global_position)
 

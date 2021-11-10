@@ -16,6 +16,8 @@ var _state_game = 0
 const GAME_PAUSED = 0
 const GAME_RUN = 1
 const GAME_READY = 2
+const GAME_OVER = 3
+
 
 onready var _players = {
 	"0": $VBoxContainer/Player2, # Player at bottom screen
@@ -24,7 +26,7 @@ onready var _players = {
 onready var _draw_pos = $DrawPosition
 onready var _time_count = $TimeCount
 onready var _gui_text = $GuiText
-onready var _board_ui = $VBoxContainer/BoardContainer
+onready var _board_ui = $BoardContainer
 
 const P1 = "0"
 const P2 = "1"
@@ -66,6 +68,8 @@ func _process(delta):
 		if _cur_time <= 0 :
 			_cur_time = _max_time_turn
 			_switch_turn()
+	elif _state_game == GAME_OVER:
+		print("Game over!")
 	
 	
 	if _state_game == GAME_RUN:
@@ -147,7 +151,7 @@ func _do_deal_card(player_id):
 	cur_player.draw_card(_draw_pos, new_card)
 	
 func _switch_turn():
-	print("test curret: ", _current_player.id, "- ", P1, " - ", P2)
+	#print("test curret: ", _current_player.id, "- ", P1, " - ", P2)
 	var new_turn_id = -1
 	if _current_player.id == P1:
 		new_turn_id = P2
@@ -156,12 +160,15 @@ func _switch_turn():
 		
 	_current_player = _players[new_turn_id]
 	var msg = "Turn of\n" + _current_player.name
-	print("switch_turn ",new_turn_id)
+	#print("switch_turn ",new_turn_id)
 	
 	_gui_text.start_show(msg)
 	
-	_do_deal_card(P1)
-	_do_deal_card(P2)
+	if _deck.size() - 1 > 0:
+		_do_deal_card(new_turn_id)
+	else:
+		_state_game = GAME_OVER
+		
 	
 	
 

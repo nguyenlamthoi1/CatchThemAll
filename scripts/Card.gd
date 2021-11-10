@@ -13,12 +13,20 @@ const BG_IMG = {
 }
 
 var holdable = false
-var hold_enter = false
+var holding = false
+var can_drop = false
 var touch_pos = Vector2()
+var last_pos = Vector2()
+var drop_slot = null
+var pos = Vector2()
+
 var delta_x
 var delta_y
 var new_delta_x
 var new_delta_y
+
+var idx_in_hand = -1
+var card_owner = null
 
 #var _frames = preload("")
 var _frame
@@ -69,7 +77,7 @@ func _on_Tween_tween_completed(object, key):
 
 func _on_Area2D_input_event(viewport, event, shape_idx):
 	if true:
-		hold_enter = true
+		holding = true
 		if event is InputEventMouseButton :
 			
 		#if event is InputEventScreenTouch and event.is_pressed():
@@ -85,3 +93,46 @@ func _on_Area2D_input_event(viewport, event, shape_idx):
 			#position = Vector2(new_delta_x, new_delta_y)
 		
 			
+
+
+func _on_TouchScreenButton_pressed():
+	holding = true
+	last_pos = Vector2(0.0, 0.0)
+	
+	
+func _on_TouchScreenButton_released():
+	holding = false
+	if !can_drop:
+		position = last_pos
+	else:
+		var new_parent = drop_slot
+		get_parent().remove_child(self)
+		new_parent.add_child(self)
+		self.position = Vector2(0,0)
+		#unset_can_drop()
+		#card_owner.hand[idx_in_hand] = null
+	
+func _input(event):
+	if holding:
+		if event is InputEventScreenTouch and event.is_pressed():
+			#last_pos = event.get_position()
+			touch_pos = event.get_position()
+			delta_x = touch_pos.x - position.x
+			delta_y = touch_pos.y - position.y
+		elif event is InputEventScreenDrag:
+			touch_pos = event.get_position()
+			new_delta_x = touch_pos.x - delta_x
+			new_delta_y = touch_pos.y - delta_y
+			position = Vector2(new_delta_x, new_delta_y)
+			
+func set_can_drop(slot, p_pos):
+	drop_slot = slot
+	pos = p_pos
+	can_drop = true
+	
+func unset_can_drop():
+	drop_slot = null
+	pos = null
+	can_drop = false
+	holding = false
+		

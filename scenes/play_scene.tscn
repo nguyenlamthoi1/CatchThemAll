@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://scenes/PlayerInfo.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/gui/enemy_card_slot.png" type="Texture" id=2]
@@ -7,22 +7,19 @@
 [ext_resource path="res://assets/background/pokeball.jpg" type="Texture" id=5]
 [ext_resource path="res://assets/gui/board.png" type="Texture" id=6]
 [ext_resource path="res://scripts/Board.gd" type="Script" id=7]
-[ext_resource path="res://assets/gui/green_background.png" type="Texture" id=8]
-[ext_resource path="res://assets/gui/card_ui2.png" type="Texture" id=9]
 [ext_resource path="res://scenes/Player2Info.tscn" type="PackedScene" id=10]
 [ext_resource path="res://assets/gui/player_empty_card_slot.png" type="Texture" id=11]
-[ext_resource path="res://assets/pokemons/charizard.png" type="Texture" id=12]
 [ext_resource path="res://scenes/SecondPlayerInfo.tscn" type="PackedScene" id=13]
 [ext_resource path="res://scripts/GameMaster.gd" type="Script" id=15]
 [ext_resource path="res://scripts/Player.gd" type="Script" id=16]
 [ext_resource path="res://scenes/GridSlot.tscn" type="PackedScene" id=17]
 [ext_resource path="res://scenes/GuiText.gd" type="Script" id=18]
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=1]
 size = 23
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=2]
 size = 22
 font_data = ExtResource( 4 )
 
@@ -44,6 +41,43 @@ stretch_mode = 7
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="BoardContainer" type="CenterContainer" parent="."]
+margin_top = 82.0
+margin_right = 200.0
+margin_bottom = 242.0
+size_flags_vertical = 3
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Board44" type="NinePatchRect" parent="BoardContainer"]
+margin_left = 25.0
+margin_top = 5.0
+margin_right = 175.0
+margin_bottom = 155.0
+rect_min_size = Vector2( 150, 150 )
+texture = ExtResource( 6 )
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+
+[node name="GridContainer" type="GridContainer" parent="BoardContainer/Board44"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+columns = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GridSlot" parent="BoardContainer/Board44/GridContainer" instance=ExtResource( 17 )]
+visible = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0
@@ -108,51 +142,6 @@ margin_bottom = 32.0
 texture = ExtResource( 2 )
 expand = true
 
-[node name="Card2" type="MarginContainer" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot1/Holder"]
-margin_left = -45.0
-margin_top = 96.0
-margin_right = -45.0
-margin_bottom = 96.0
-size_flags_vertical = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Background" type="TextureRect" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot1/Holder/Card2"]
-texture = ExtResource( 8 )
-expand = true
-
-[node name="Image" type="TextureRect" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot1/Holder/Card2/Background"]
-visible = false
-margin_right = 32.0
-margin_bottom = 32.0
-texture = ExtResource( 12 )
-expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Sprite" type="Sprite" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot1/Holder/Card2/Background"]
-position = Vector2( 13, 13 )
-scale = Vector2( 0.25, 0.25 )
-texture = ExtResource( 12 )
-
-[node name="Frame" type="NinePatchRect" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer/CardSlot1/Holder/Card2/Background"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -1.0
-margin_top = -1.0
-margin_right = 1.0
-margin_bottom = 1.0
-texture = ExtResource( 9 )
-patch_margin_left = 10
-patch_margin_top = 10
-patch_margin_right = 10
-patch_margin_bottom = 10
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="CardSlot2" type="MarginContainer" parent="VBoxContainer/Player1/PlayerFirstInfo/PlayerGUI/HBoxContainer"]
 margin_left = 72.0
 margin_right = 104.0
@@ -186,39 +175,11 @@ margin_bottom = 74.0
 
 [node name="PlayerInfo" parent="VBoxContainer/Player1/PlayerSecondInfo" instance=ExtResource( 13 )]
 
-[node name="BoardContainer" type="CenterContainer" parent="VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 margin_top = 78.0
 margin_right = 200.0
 margin_bottom = 242.0
 size_flags_vertical = 3
-script = ExtResource( 7 )
-
-[node name="Board44" type="NinePatchRect" parent="VBoxContainer/BoardContainer"]
-margin_left = 25.0
-margin_top = 7.0
-margin_right = 175.0
-margin_bottom = 157.0
-rect_min_size = Vector2( 150, 150 )
-texture = ExtResource( 6 )
-patch_margin_left = 10
-patch_margin_top = 10
-patch_margin_right = 10
-patch_margin_bottom = 10
-
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer/BoardContainer/Board44"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 5.0
-margin_top = 5.0
-margin_right = -5.0
-margin_bottom = -5.0
-columns = 4
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="GridSlot" parent="VBoxContainer/BoardContainer/Board44/GridContainer" instance=ExtResource( 17 )]
-visible = false
 
 [node name="Player2" type="VBoxContainer" parent="VBoxContainer"]
 margin_top = 246.0
@@ -317,7 +278,7 @@ script = ExtResource( 18 )
 [node name="LogLabel" type="Label" parent="GuiText"]
 margin_right = 200.0
 margin_bottom = 31.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 1 )
 text = "TURN OF 
 PLAYER 2"
 align = 1
@@ -339,7 +300,7 @@ margin_left = 5.0
 margin_top = -7.0
 margin_right = 40.0
 margin_bottom = 7.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 2 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 text = "15"
 valign = 1
