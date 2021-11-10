@@ -17,6 +17,8 @@ var _drag_card = null
 
 onready var selected_area = $SelectedArea
 
+var board = null
+
 func init_grid(ef_num, p_type, p_pos):
 	type = p_type
 	effect_num = ef_num
@@ -55,15 +57,17 @@ func _input(event):
 
 
 func _on_Area2D_area_entered(area):
-		print("body_in: ", str(pos.x), "-",str(pos.y))
+		#print("body_in: ", str(pos.x), "-",str(pos.y))
 		if area.is_in_group("Card"):
 			_drag_card = area
 
 
 func _on_Area2D_area_exited(area):
-	print("leave at", str(pos.x), "-",str(pos.y))
+	#print("leave at", str(pos.x), "-",str(pos.y))
 	if _drag_card != null:
 		_drag_card.unset_can_drop()	
 	_drag_card = null
 	selected_area.visible = false
-	
+
+func get_drag_card():
+	return _drag_card

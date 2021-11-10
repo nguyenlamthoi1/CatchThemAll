@@ -147,6 +147,7 @@ func _do_deal_card(player_id):
 	# create new card
 	var drawn_card_data = _deck.pop_back()
 	var new_card = CardTemp.instance()
+	new_card.gm = self
 	new_card.init_card(drawn_card_data, player_id)
 	cur_player.draw_card(_draw_pos, new_card)
 	
@@ -169,6 +170,11 @@ func _switch_turn():
 	else:
 		_state_game = GAME_OVER
 		
+
+func _on_card_drop(player_id, pos):
+	_board_ui.on_card_drop(player_id, pos)
+	
+
 	
 	
 

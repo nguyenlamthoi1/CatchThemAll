@@ -12,13 +12,18 @@ const BG_IMG = {
 	"2": preload("res://assets/gui/yellow_background-export.png")
 }
 
+var gm = null
+
 var holdable = false
 var holding = false
+var on_slot = false
+
 var can_drop = false
 var touch_pos = Vector2()
 var last_pos = Vector2()
 var drop_slot = null
 var pos = Vector2()
+
 
 var delta_x
 var delta_y
@@ -38,6 +43,8 @@ var _right
 var _bottom
 var _tween
 
+var stats = [0, 0, 0, 0]
+var eff_num = 0
 var _card_data = {}
 
 func init_card(card_data, owner):
@@ -60,11 +67,17 @@ func init_card(card_data, owner):
 	_background.texture = BG_IMG[str(_card_data.type)]
 	# stats
 	var use_random_stats = _card_data.use_random
-	_left.text = str(_card_data.random_stats[0]) if use_random_stats else str(_card_data.stats[0])
-	_top.text = str(_card_data.random_stats[1]) if use_random_stats else str(_card_data.stats[1])
-	_right.text = str(_card_data.random_stats[2]) if use_random_stats else str(_card_data.stats[2])
-	_bottom.text = str(_card_data.random_stats[3]) if use_random_stats else str(_card_data.stats[3])
-
+	stats[0] =_card_data.random_stats[0] if use_random_stats else _card_data.stats[0]
+	stats[1] =_card_data.random_stats[1] if use_random_stats else _card_data.stats[1]
+	stats[2] =_card_data.random_stats[2] if use_random_stats else _card_data.stats[2]
+	stats[3] =_card_data.random_stats[3] if use_random_stats else _card_data.stats[3]
+	
+	_left.text = str(stats[0])
+	_top.text = str(stats[1])
+	_right.text = str(stats[2])
+	_bottom.text = str(stats[3])
+	
+	
 func move_from_to(from_pos, to_pos):
 	holdable = false
 	_tween.interpolate_property(self, "global_position", from_pos, to_pos, 0.8)
@@ -104,16 +117,24 @@ func _on_TouchScreenButton_released():
 	holding = false
 	if !can_drop:
 		position = last_pos
-	else:
+	elif !on_slot:
+		# set up ui for card
 		var new_parent = drop_slot
 		get_parent().remove_child(self)
 		new_parent.add_child(self)
 		self.position = Vector2(0,0)
-		#unset_can_drop()
-		#card_owner.hand[idx_in_hand] = null
+		unset_can_drop()
+		holding = false
+		on_slot = true
+		# update hand
+		card_owner.hand[idx_in_hand] = null
+		card_owner.hand_num -= 1
+		if card_owner.hand_num < 0: card_owner.hand_num = 0
+		# notify for game_master
+		gm._on_card_drop(card_owner.id, pos)
 	
 func _input(event):
-	if holding:
+	if holding and !on_slot:
 		if event is InputEventScreenTouch and event.is_pressed():
 			#last_pos = event.get_position()
 			touch_pos = event.get_position()
@@ -132,7 +153,19 @@ func set_can_drop(slot, p_pos):
 	
 func unset_can_drop():
 	drop_slot = null
-	pos = null
+	#pos = null
 	can_drop = false
-	holding = false
+	#holding = false
 		
+
+func update_stats(p_eff_num):
+	eff_num = p_eff_num
+	stats[0] += eff_num
+	stats[1] += eff_num
+	stats[2] += eff_num
+	stats[3] += eff_num
+	_left.text = str(stats[0])
+	_top.text = str(stats[1])
+	_right.text = str(stats[2])
+	_bottom.text = str(stats[3])
+	
