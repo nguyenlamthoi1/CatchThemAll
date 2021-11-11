@@ -10,6 +10,9 @@ var id = 0
 var max_hand = 4
 var card_slots = []
 
+#actions
+var can_drag_card = false
+
 onready var player_info = $PlayerSecondInfo/PlayerInfo
 
 
@@ -110,3 +113,6 @@ func update_score(pscore):
 	var score_label = player_info.get_node("ScoreCounter/ScoreLabel")
 	score_label.text = str(pscore)	
 	score = pscore
+	
+func enable_turn(enable):
+	can_drag_card = enable

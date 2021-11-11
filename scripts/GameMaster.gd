@@ -3,6 +3,7 @@ extends Node
 var CardTemp = preload("res://scenes/Card.tscn")
 
 var game_mode = GlobalGame.GAME_MODE.PVP
+var pausing_game_mode
 
 var _current_player
 var _deck = []
@@ -27,6 +28,7 @@ onready var _draw_pos = $DrawPosition
 onready var _time_count = $TimeCount
 onready var _gui_text = $GuiText
 onready var _board_ui = $BoardContainer
+onready var _result_popup = $PopupContainer
 
 const P1 = "0"
 const P2 = "1"
@@ -67,7 +69,6 @@ func _process(delta):
 	elif _state_game == GAME_RUN:
 		_cur_time = _cur_time - delta
 		if _cur_time <= 0 :
-			_cur_time = _max_time_turn
 			_switch_turn()
 	elif _state_game == GAME_OVER:
 		pass
@@ -132,8 +133,6 @@ func _prepair_deck():
 	# --
 		
 func _start_pvp_game():
-
-	
 	for player_id in _players:
 		var cur_player = _players[player_id]
 		if !cur_player.is_full_hand():		
@@ -141,8 +140,15 @@ func _start_pvp_game():
 	
 	var random_first_id = str(rng.randi_range(0, 1))
 	_current_player = _players[random_first_id]
+	var next_player = get_opponent(random_first_id)
+	_current_player.enable_turn(true)
+	next_player.enable_turn(false)
+	
+	var msg = _current_player.name + " go first"
+	_gui_text.start_show(msg)	
 	_state_game = GAME_RUN
-		
+	
+	
 func _do_deal_card(player_id):
 	var cur_player = _players[player_id]
 	if cur_player.is_full_hand():
@@ -157,6 +163,8 @@ func _do_deal_card(player_id):
 	
 func _switch_turn():
 	#print("test curret: ", _current_player.id, "- ", P1, " - ", P2)
+	_cur_time = _max_time_turn
+	
 	var new_turn_id = -1
 	if _current_player.id == P1:
 		new_turn_id = P2
@@ -164,11 +172,18 @@ func _switch_turn():
 		new_turn_id = P1
 		
 	_current_player = _players[new_turn_id]
+	var old_player = get_opponent(new_turn_id)
+	
+	# Enable drag card
+	_current_player.enable_turn(true)
+	old_player.enable_turn(false)
+	
+	# Notify
 	var msg = "Turn of\n" + _current_player.name
 	#print("switch_turn ",new_turn_id)
-	
 	_gui_text.start_show(msg)
 	
+	# Try draw card
 	if _deck.size() - 1 > 0:
 		_do_deal_card(new_turn_id)
 	else:
@@ -182,6 +197,9 @@ func _on_card_drop(player_id, drop_card, pos):
 	if _board_ui.is_full():
 		print("Game over: found winner!")
 		_state_game = GAME_OVER		
+		return
+	else:
+		_switch_turn()
 	
 func get_player(player_id):
 	return _players[player_id]
@@ -199,3 +217,11 @@ func update_score_from_board():
 		var player = _players[player_id]
 		player.update_score(new_score)		
 	
+func pause():
+	pausing_game_mode = game_mode
+	game_mode = GAME_PAUSED # Stop counting time
+	_current_player.enable_turn(false) # Stop interacting
+	
+func continue_game():
+	game_mode = pausing_game_mode
+	_current_player.enable_turn(true)

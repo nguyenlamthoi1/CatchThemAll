@@ -4,7 +4,7 @@ const COLUMNS: int = 4
 const ROWS: int = 4
 const RULE_GAME_SIZE: int = 4
 const MAX_HAND_CARD: int = 4
-const PLAYER_TURN_TIME: float = 5.0
+const PLAYER_TURN_TIME: float = 10.0
 const NUM_EFF_AREA = 4
 
 const P1 = "0"
@@ -62,9 +62,15 @@ const CARD_DICT = {
 		]
 }
 
+var GameScene = preload("res://scenes/play_scene.tscn")
+var WelcomeScene = preload("res://scripts/welcome_scene.gd")
 
+var _game_mode = GAME_MODE.PVP
 
 var rng = RandomNumberGenerator.new()
+
+func set_game_mode(mode):
+	_game_mode = mode
 
 func _ready():
 	rng.randomize()

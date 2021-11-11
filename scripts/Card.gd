@@ -134,7 +134,7 @@ func _on_TouchScreenButton_released():
 		gm._on_card_drop(card_owner.id, self, pos)
 	
 func _input(event):
-	if holding and !on_slot:
+	if holding and !on_slot and card_owner.can_drag_card:
 		if event is InputEventScreenTouch and event.is_pressed():
 			#last_pos = event.get_position()
 			touch_pos = event.get_position()

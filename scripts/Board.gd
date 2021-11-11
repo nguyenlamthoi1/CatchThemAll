@@ -2,6 +2,8 @@ extends Node
 
 var GridSlot = preload("res://scenes/GridSlot.tscn")
 
+
+
 const P1 = "0"
 const P2 = "1"
 const EMPTY_TYPE = 99
