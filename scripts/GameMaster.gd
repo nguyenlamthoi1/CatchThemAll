@@ -3,7 +3,7 @@ extends Node
 var CardTemp = preload("res://scenes/Card.tscn")
 
 var game_mode = GlobalGame.GAME_MODE.PVP
-var pausing_game_mode
+var _pausing_state_game
 
 var _current_player
 var _deck = []
@@ -49,6 +49,8 @@ func _ready():
 	
 	_board_ui.init_board()
 	_board_ui.gm = self
+	
+	_result_popup.init_popup(self)
 	
 	_state_game = GAME_READY
 	
@@ -187,8 +189,9 @@ func _switch_turn():
 	if _deck.size() - 1 > 0:
 		_do_deal_card(new_turn_id)
 	else:
-		_state_game = GAME_OVER
-		print("Game over: out of deck")
+		#print("Game over: out of deck")		
+		#_do_over_state()
+		pass
 
 func _on_card_drop(player_id, drop_card, pos):
 	# do drop card on board
@@ -196,7 +199,7 @@ func _on_card_drop(player_id, drop_card, pos):
 	# check if board is full
 	if _board_ui.is_full():
 		print("Game over: found winner!")
-		_state_game = GAME_OVER		
+		_do_over_state()
 		return
 	else:
 		_switch_turn()
@@ -218,10 +221,28 @@ func update_score_from_board():
 		player.update_score(new_score)		
 	
 func pause():
-	pausing_game_mode = game_mode
-	game_mode = GAME_PAUSED # Stop counting time
-	_current_player.enable_turn(false) # Stop interacting
+	_pausing_state_game = _state_game
+	_state_game = GAME_PAUSED # Stop counting time
+	if _current_player:
+		_current_player.enable_turn(false) # Stop interacting
 	
 func continue_game():
-	game_mode = pausing_game_mode
-	_current_player.enable_turn(true)
+	_state_game = _pausing_state_game
+	if _current_player:
+		_current_player.enable_turn(true)
+
+
+func _on_PauseButton_pressed():
+	pause()
+	_result_popup.show_pause()
+	
+func _do_over_state():
+	_current_player.enable_turn(false) # Stop interacting
+	get_opponent(_current_player.id).enable_turn(false)
+	_state_game = GAME_OVER		
+	var p1_score = _board_ui.player_scores[P1]
+	var p2_score = _board_ui.player_scores[P2]
+	
+	_result_popup.show_result(p1_score, p2_score)
+	
+	

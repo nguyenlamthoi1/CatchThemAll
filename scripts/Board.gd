@@ -162,5 +162,20 @@ func is_full():
 				break
 		if !is_full:
 			break
+	#for test
+	var str_r = ""
+	for r in range(row_num):
+		str_r = ""
+		for c in range(col_num) :
+			var ch = ""
+			if data_board[r][c] == EMPTY_TYPE:
+				ch = "_"
+			elif data_board[r][c] == P1_TYPE:
+				ch = "P1"
+			elif data_board[r][c] == P2_TYPE:
+				ch = "P2"				
+			str_r += " " + ch
+		print(str(r), " : ", str_r)
+			
 	return is_full		
 	
