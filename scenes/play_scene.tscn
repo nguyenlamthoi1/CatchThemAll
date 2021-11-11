@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://scenes/PlayerInfo.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/gui/enemy_card_slot.png" type="Texture" id=2]
@@ -16,7 +16,6 @@
 [ext_resource path="res://assets/popup/popup3.png" type="Texture" id=14]
 [ext_resource path="res://scripts/GameMaster.gd" type="Script" id=15]
 [ext_resource path="res://scripts/Player.gd" type="Script" id=16]
-[ext_resource path="res://scenes/GridSlot.tscn" type="PackedScene" id=17]
 [ext_resource path="res://scenes/GuiText.gd" type="Script" id=18]
 [ext_resource path="res://assets/popup/popup1.png" type="Texture" id=19]
 [ext_resource path="res://assets/popup/popup6.png" type="Texture" id=20]
@@ -89,9 +88,6 @@ columns = 4
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="GridSlot" parent="BoardContainer/Board44/GridContainer" instance=ExtResource( 17 )]
-visible = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0

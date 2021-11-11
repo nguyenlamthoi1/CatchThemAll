@@ -14,7 +14,5 @@ func update_score(score):
 	score_label.text = str(score)	
 	_score = score
 
-
-
 func _on_ContinueButton_pressed():
 	pass # Replace with function body.

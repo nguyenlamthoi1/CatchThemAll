@@ -41,6 +41,7 @@ func init_board():
 		for j in GlobalGame.COLUMNS:
 			# create slot ui
 			var new_grid = GridSlot.instance()
+			new_grid.name = "grid_slot_" + str(i) +"_"+str(j)
 			grid_container.add_child(new_grid)
 			new_grid.init_grid(0, EMPTY_TYPE, Vector2(i, j))
 			new_grid.board = self
@@ -157,11 +158,12 @@ func is_full():
 	var is_full = true
 	for r in range(row_num):
 		for c in range(col_num) :
-			if data_board[r][c] != EMPTY_TYPE:
+			if data_board[r][c] == EMPTY_TYPE:
 				is_full = false
 				break
 		if !is_full:
 			break
+			
 	#for test
 	var str_r = ""
 	for r in range(row_num):
@@ -176,6 +178,11 @@ func is_full():
 				ch = "P2"				
 			str_r += " " + ch
 		print(str(r), " : ", str_r)
-			
+		
+	var msg = "BOARD is FULL" if is_full else "BOARD not FULL"
+	print(msg)		
+	#--
+	
 	return is_full		
+	
 	

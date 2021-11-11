@@ -63,7 +63,7 @@ const CARD_DICT = {
 }
 
 var GameScene = preload("res://scenes/play_scene.tscn")
-var WelcomeScene = preload("res://scripts/welcome_scene.gd")
+var WelcomeScene = preload("res://welcome_scene.tscn")
 
 var _game_mode = GAME_MODE.PVP
 
