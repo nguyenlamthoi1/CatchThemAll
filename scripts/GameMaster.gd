@@ -68,7 +68,11 @@ func _init_game_mode():
 		_players[P1].init_player(P1, "Player 1", GlobalGame.GAME_MODE.PVP, self)
 		_players[P2].init_player(P2, "AI easy", GlobalGame.GAME_MODE.AI_RANDOM, self)	
 		with_AI = true
-		
+	elif game_mode == GlobalGame.GAME_MODE.AI_MIN_MAX:
+		_players[P1].init_player(P1, "Player 1", GlobalGame.GAME_MODE.PVP, self)
+		_players[P2].init_player(P2, "AI easy", GlobalGame.GAME_MODE.AI_MIN_MAX, self)	
+		with_AI = true
+	
 func get_time():
 	return _cur_time		
 

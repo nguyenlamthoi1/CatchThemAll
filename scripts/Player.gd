@@ -256,42 +256,13 @@ func hard_thinking(player_name):
 	var board_root_node = MaxMinAI.BoardNode.new(board_state)
 	
 	# 3. execute ai algorithm
-	var ai_executer = MaxMinAI.new()
+	var ai_executer = MaxMinAI.new(_gm)
 	var sol = ai_executer.find_sol(board_root_node)
 	var chosen_pos = sol[0]
 	var max_value = sol[1]
 				
 
-				
-				
-	rng.randomize()
-	var rand_i = rng.randi_range(0, empty_board_array.size() - 1)
-	var found_sol = true
-	var sol_pos = empty_board_array[rand_i]
-	
-	var hand_array = []
-	for i in range(hand.size()):
-		if hand[i] != null:
-			hand_array.append(i)
-	
-	
-	var rand_hand_id  =rng.randi_range(0, hand_array.size() - 1)
-	#print(player_name, " make decision! at")	
-	#do_drop_card_at(hand_array[rand_hand_id], sol_pos)
-	
-	# while true if want to wait 3s
-	while true:
-		#
-		#print("while true")
-		var cur_time = _gm.get_time()
-		if  cur_time < GlobalGame.AI_LIMIT_THINKING_TIME  or cur_time < GlobalGame.PLAYER_TURN_TIME - 3.0:
-			print(player_name, " make decision! at ", str(cur_time), " : ", str(sol_pos[0]),",",str(sol_pos[1]))
-			found_sol = false
-			do_drop_card_at(rand_hand_id, sol_pos)
-			return
-		#elif found_sol:
-		#	found_sol = false
-		#	return
+	do_drop_card_at(rand_hand_id, sol_pos)
 	return
 
 func do_drop_card_at(hand_card_id, drop_pos):

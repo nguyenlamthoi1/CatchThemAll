@@ -7,6 +7,8 @@ const P2 = 2
 
 const MAX_DEPTH = 3
 
+var _gm
+
 class Slot:
 	var _cur_card_id = -1
 	var _eff_buff = 0
@@ -78,6 +80,8 @@ class BoardNode:
 			chosen_slot.set_owner(player_id)
 			_try_catch_others(checking_board, player_id, r, c)
 			var child_node = BoardNode.new(checking_board)
+			child_nodes.append([child_node, [r, c]])
+		return child_nodes
 	
 	func _try_catch_others(checking_board, player_id, row, col):
 		var left = GlobalGame.LEFT
@@ -113,29 +117,39 @@ class BoardNode:
 		return valid_row and valid_col
 			
 			
+func _init(gm):
+	_gm = gm			
+			
 func find_sol(board_node: BoardNode, maximize_player:bool, player_id, depth: int, alpha: int, beta: int):
 	if board_node.is_leaf() or depth == MAX_DEPTH:
+		#.. or _gm.get_time() < GlobalGame.PLAYER_TURN_TIME - 3.0
 		return board_node.get_h_value()
 	if maximize_player:
 		var value = -INF
-		var child_nodes = board_node.get_all_next_nodes(player_id)
-		for i in child_nodes.size():
-			var child_node = child_nodes[i]
+		var pos = null
+		
+		var children = board_node.get_all_next_nodes(player_id)
+		for i in children.size():
+			var child_node = children[i][0]
+			pos = children[i][1]
 			value = max(value, find_sol (child_node, false, _get_opp_id(player_id), depth - 1, alpha, beta))
 			if value >= beta:
 				break
 			alpha = max(alpha, value)
-		return value
+		return [value, pos]
 	else:
 		var value = INF
-		var child_nodes = board_node.get_all_next_nodes(player_id)
-		for i in child_nodes.size():
-			var child_node = child_nodes[i]
+		var pos = null
+		
+		var children = board_node.get_all_next_nodes(player_id)
+		for i in children.size():
+			var child_node = children[i][0]
+			pos = children[i][1]
 			value = min(value, find_sol (child_node, true,_get_opp_id(player_id), depth - 1, alpha, beta))
 			if value <= alpha:
 				break
 			beta = min(beta, value)
-		return value
+		return [value, pos]
 		
 func _get_opp_id(player_id):
 	return 1 if player_id == 2 else 1
