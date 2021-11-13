@@ -110,11 +110,13 @@ func _prepair_deck():
 		var rand_i = rng.randi_range(0, card_list.size() - 1)
 		var pick_card = card_list[rand_i]
 		var pick_card_index = rand_i
+		
 		# Add to deck at random position
 		rng.randomize()	
 		rand_i = rng.randi_range(0, _deck.size() - 1)
 		rand_i = 0 if rand_i < 0 else rand_i
 		_deck.insert(rand_i, pick_card.duplicate())
+		
 		#_deck.insert(rand_i, pick_card_index)
 		#print("test_i inser at:  "+ str(rand_i)+" with " + str(i) + " id = " + str(pick_card_index) + " - size :" + str(_deck.size()))
 		
@@ -219,6 +221,9 @@ func update_score_from_board():
 		var new_score = _board_ui.player_scores[player_id]
 		var player = _players[player_id]
 		player.update_score(new_score)		
+	
+func get_score(player_id):
+	return _board_ui.player_scores[player_id]
 	
 func pause():
 	_pausing_state_game = _state_game

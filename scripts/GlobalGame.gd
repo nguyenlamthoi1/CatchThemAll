@@ -93,21 +93,41 @@ func _load_my_res():
 				
 			card_data.use_random = USE_RANDOM_STATS
 			# Test
-			#print(CARD_DICT[card_type][i].name + " Stat_arr: " + str(CARD_DICT[card_type][i].random_stats) )
+			print(CARD_DICT[card_type][i].name + " Stat_arr: " + str(CARD_DICT[card_type][i].random_stats) )
 
 func _get_rand_stats_array(level):
 		var total_stats = (level + 1) * 4
 		var const_total_stats = total_stats
-		var stats_array = [0, 0, 0, 0]
+		var stats_array = []
 		var STAT_NUM = 4
+		var random_stat = 0
 		for i in range(STAT_NUM):
-			if i == STAT_NUM - 1:
-				stats_array[i] = const_total_stats - stats_array[i - 1] - stats_array[i - 2] -  stats_array[i - 3]
-			else:
-				stats_array[i] = rng.randi_range(0, total_stats)
-			total_stats -= stats_array[i]
+			#if i == STAT_NUM - 1:
+			#	random_stat = const_total_stats - stats_array[i - 1] - stats_array[i - 2] -  stats_array[i - 3]
+				#stats_array[i] = const_total_stats - stats_array[i - 1] - stats_array[i - 2] -  stats_array[i - 3]
+			#else:
+			#	random_stat = rng.randi_range(0, total_stats)
+				#stats_array[i] = rng.randi_range(0, total_stats)
+			#total_stats -= stats_array[i]
+			
 			if total_stats == 0:
-				break
+				random_stat = 0
+			else:
+				random_stat = rng.randi_range(0, total_stats)			
+			
+			total_stats -= random_stat
+			
+			# Add to deck at random position
+			rng.randomize()	
+			var rand_i = rng.randi_range(0, stats_array.size())
+			#if rand_i == -1:
+			#	rand_i = 0
+			stats_array.insert(rand_i, random_stat)
+			#print("Inser: ", str(rand_i))
+			
+			#stats_array[i] = random_stat
+			
+			
 		return stats_array
 		
 
