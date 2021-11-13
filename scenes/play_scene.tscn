@@ -346,7 +346,6 @@ __meta__ = {
 }
 
 [node name="PopupContainer" type="MarginContainer" parent="."]
-visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -374,33 +373,6 @@ patch_margin_left = 10
 patch_margin_top = 10
 patch_margin_right = 10
 patch_margin_bottom = 10
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CloseButton" type="TextureButton" parent="PopupContainer/Popup"]
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -25.0
-margin_top = 8.0
-margin_right = -16.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 16, 16 )
-size_flags_horizontal = 3
-texture_normal = ExtResource( 12 )
-texture_pressed = ExtResource( 20 )
-expand = true
-__meta__ = {
-"_edit_group_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="Icon" type="TextureRect" parent="PopupContainer/Popup/CloseButton"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-texture = ExtResource( 23 )
-expand = true
-stretch_mode = 6
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -529,9 +501,34 @@ text = "You win"
 align = 1
 valign = 1
 
+[node name="CloseButton" type="TextureButton" parent="PopupContainer/Popup"]
+margin_left = 154.0
+margin_top = 9.0
+margin_right = 171.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 16, 16 )
+size_flags_horizontal = 3
+texture_normal = ExtResource( 12 )
+texture_pressed = ExtResource( 20 )
+expand = true
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Icon" type="TextureRect" parent="PopupContainer/Popup/CloseButton"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 23 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="timeout" from="GuiText/Timer" to="GuiText" method="_on_Timer_timeout"]
 [connection signal="pressed" from="PauseButton" to="." method="_on_PauseButton_pressed"]
-[connection signal="pressed" from="PopupContainer/Popup/CloseButton" to="PopupContainer" method="_on_CloseButton_pressed"]
 [connection signal="pressed" from="PopupContainer/Popup/VBoxContainer/HBoxContainer/ContinueButton" to="PopupContainer" method="_on_ContinueButton_pressed"]
 [connection signal="pressed" from="PopupContainer/Popup/VBoxContainer/HBoxContainer/ReplayButton" to="PopupContainer" method="_on_ReplayButton_pressed"]
 [connection signal="pressed" from="PopupContainer/Popup/VBoxContainer/HBoxContainer/HomeButton" to="PopupContainer" method="_on_HomeButton_pressed"]
+[connection signal="pressed" from="PopupContainer/Popup/CloseButton" to="PopupContainer" method="_on_CloseButton_pressed"]

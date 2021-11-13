@@ -70,7 +70,7 @@ func on_card_drop(player_id, cur_card, pos):
 	var col = pos.y
 	var cur_player = gm.get_player(player_id)
 	
-	print("[Board] ", str(player_id), "On card dropped at ,", " : ", str(row), " , ",str(col))
+	print("[Board] ", str(player_id), " dropped at ", " : ", str(row), " , ",str(col))
 	
 	# Get grid slot at pos
 	var cur_slot = ui_board[row][col] # This is slot
@@ -83,12 +83,14 @@ func on_card_drop(player_id, cur_card, pos):
 	# Assign new card owner
 	cur_slot.grid_owner = cur_player
 	
-	# Update data insdie
+	# Update data inside
 	player_scores[player_id] += 1 # player's new score
 	data_board[pos.x][pos.y] = P1_TYPE if player_id == P1 else P2_TYPE
 	
 	# find and catch adjacent cards
 	_try_catch_ones(player_id, cur_card, row, col)
+	print("new score: P1: ", player_scores[P1], " - P2: ", player_scores[P2])
+	
 	
 	# Update score ui
 	gm.update_score_from_board()
@@ -116,7 +118,6 @@ func _try_catch_ones(player_id, cur_card, row, col):
 		var adj_pos = cur_pos + cur_dir
 		var adj_row = adj_pos.x
 		var adj_col = adj_pos.y
-		
 		#print("check adject: ", str(adj_row), ",", str(adj_col))
 		
 		# Check if it a valid adjacent position		
@@ -124,28 +125,29 @@ func _try_catch_ones(player_id, cur_card, row, col):
 			var adj_slot = ui_board[adj_row][adj_col]
 			var adj_card = adj_slot.get_hold_card()
 			if adj_card != null and cur_card != null: 
-				var adj_stat = check_pairs_stats[i][0]
-				var cur_stat = check_pairs_stats[i][1]
-				
-				#print("[Board] Have one! Try catch it: adj = ", str(adj_card.stats[adj_stat]), " vs cur = ", str(cur_card.stats[cur_stat]))
-				
-				# Compare 2 cards
-				var can_catch = adj_card.stats[adj_stat] < cur_card.stats[cur_stat]
-				if can_catch:
-					# update new data
-					adj_card.update_owner(cur_player)
-					data_board[adj_row][adj_col] = P1_TYPE if player_id == P1 else P2_TYPE
-					# update score
-					player_scores[player_id] += 1 # Player's new score
-					player_scores[opp_id] -= 1 #  # Opponent 's new score
+				if adj_card.card_owner.id != player_id: # Adjcent card is opponent's
+					var adj_stat = check_pairs_stats[i][0]
+					var cur_stat = check_pairs_stats[i][1]
+					
+					#print("[Board] Have one! Try catch it: adj = ", str(adj_card.stats[adj_stat]), " vs cur = ", str(cur_card.stats[cur_stat]))
+					
+					# Compare 2 cards
+					var can_catch = adj_card.stats[adj_stat] < cur_card.stats[cur_stat]
+					if can_catch:
+						# update new data
+						adj_card.update_owner(cur_player)
+						data_board[adj_row][adj_col] = P1_TYPE if player_id == P1 else P2_TYPE
+						# update score
+						player_scores[player_id] += 1 # Player's new score
+						player_scores[opp_id] -= 1 #  # Opponent 's new score
 
-					#print("[Board] Catch Success! ")
+						#print("[Board] Catch Success! ")
+					else:
+						pass
+						#print("[Board] Catch Failed!")
 				else:
 					pass
-					#print("[Board] Catch Failed!")
-			else:
-				pass
-				#print("[Board] Can't find left one")			
+					#print("[Board] Can't find left one")			
 
 func _is_pos_in_range(row, col):
 	var valid_row = 0 <= row and row < GlobalGame.ROWS
@@ -173,9 +175,9 @@ func is_full():
 			if data_board[r][c] == EMPTY_TYPE:
 				ch = "_"
 			elif data_board[r][c] == P1_TYPE:
-				ch = "P1"
+				ch = "1"
 			elif data_board[r][c] == P2_TYPE:
-				ch = "P2"				
+				ch = "2"				
 			str_r += " " + ch
 		print(str(r), " : ", str_r)
 		
