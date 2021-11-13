@@ -213,16 +213,86 @@ func easy_thinking(player_name):
 
 func hard_thinking(player_name):
 	print(player_name, " hard thinking...")
+	
+	var EMPTY_TYPE = 99
+	var EFF_TYPE = 100
+	var P1_TYPE = 0
+	var P2_TYPE = 1
+	
+	var board_ui = _gm._board_ui
+	
+	var empty_board_array = []
+	
+	var my_data_board = board_ui.data_board.duplicate()
+	var my_eff_board = board_ui.eff_board.duplicate()
+	var my_ui_booard = board_ui.ui_board
+	
+	# Minmax AI all steps:
+	# 1. create board_state = [ <Slot> ]
+	var board_state = []
+	for r in GlobalGame.ROWS:
+		for c in GlobalGame.COLUMNS:
+			var ui_slot = board_ui.get_ui_slot(r, c)
+			var slot
+			if my_data_board[r][c] == EMPTY_TYPE:
+				slot = MaxMinAI.Slot.new()
+			else:
+				var ui_card = board_ui.get_card_at(r, c)				
+				var card_id = ui_card.get_id()
+				var base_stats = ui_card.get_base_stats()
+				var eff_buff = my_eff_board[r][c]
+				
+				var owner_id = 0
+				match ui_card.card_owner.id:
+					"0": #P1
+						owner_id = 1
+					"1": #P2
+						owner_id = 2
+						
+				slot = MaxMinAI.Slot.new(card_id, base_stats, eff_buff, owner_id)
+				
+			board_state.append(slot)
+	# 2. create board root node
+	var board_root_node = MaxMinAI.BoardNode.new(board_state)
+	
+	# 3. execute ai algorithm
+	var ai_executer = MaxMinAI.new()
+	var sol = ai_executer.find_sol(board_root_node)
+	var chosen_pos = sol[0]
+	var max_value = sol[1]
+				
+
+				
+				
+	rng.randomize()
+	var rand_i = rng.randi_range(0, empty_board_array.size() - 1)
+	var found_sol = true
+	var sol_pos = empty_board_array[rand_i]
+	
+	var hand_array = []
+	for i in range(hand.size()):
+		if hand[i] != null:
+			hand_array.append(i)
+	
+	
+	var rand_hand_id  =rng.randi_range(0, hand_array.size() - 1)
+	#print(player_name, " make decision! at")	
+	#do_drop_card_at(hand_array[rand_hand_id], sol_pos)
+	
+	# while true if want to wait 3s
 	while true:
-		#print("	...")
+		#
+		#print("while true")
 		var cur_time = _gm.get_time()
-		if  cur_time < GlobalGame.AI_LIMIT_THINKING_TIME  or cur_time < GlobalGame.PLAYER_TURN_TIME - GlobalGame.AI_THINKING_TIME:
-			print(player_name, " make decision! at ", str(cur_time))
+		if  cur_time < GlobalGame.AI_LIMIT_THINKING_TIME  or cur_time < GlobalGame.PLAYER_TURN_TIME - 3.0:
+			print(player_name, " make decision! at ", str(cur_time), " : ", str(sol_pos[0]),",",str(sol_pos[1]))
 			found_sol = false
+			do_drop_card_at(rand_hand_id, sol_pos)
 			return
-		elif found_sol:
-			found_sol = false
-			return
+		#elif found_sol:
+		#	found_sol = false
+		#	return
+	return
 
 func do_drop_card_at(hand_card_id, drop_pos):
 	print("do drop: ", hand_card_id, " at ", str(drop_pos[0], " , " , str(drop_pos[1])))

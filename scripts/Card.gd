@@ -212,3 +212,8 @@ func update_owner(p_player):
 	_frame.modulate = COLOR_P1 if p_player.id == P1 else COLOR_P2
 	card_owner = p_player
 	
+func get_id():
+	return _card_data.id
+
+func get_base_stats():
+	return stats.duplicate()

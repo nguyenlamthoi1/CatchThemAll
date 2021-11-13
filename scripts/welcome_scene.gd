@@ -12,4 +12,5 @@ func _on_EasyButton_pressed():
 
 
 func _on_HardButton_pressed():
-	pass # Replace with function body.
+	GlobalGame.set_game_mode(GlobalGame.GAME_MODE.AI_MIN_MAX)
+	get_tree().change_scene_to(GlobalGame.GameScene)

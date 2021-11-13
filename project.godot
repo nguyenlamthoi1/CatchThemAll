@@ -10,12 +10,12 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Reference",
-"class": "MinimaxAI",
+"class": "MaxMinAI",
 "language": "GDScript",
-"path": "res://scenes/ai.gd"
+"path": "res://scenes/AI.gd"
 } ]
 _global_script_class_icons={
-"MinimaxAI": ""
+"MaxMinAI": ""
 }
 
 [application]

@@ -94,7 +94,13 @@ func on_card_drop(player_id, cur_card, pos):
 	
 	# Update score ui
 	gm.update_score_from_board()
-			
+
+func get_ui_slot(r, c):
+	return ui_board[r][c]
+
+func get_card_at(r, c):
+	return get_ui_slot(r, c).get_hold_card()
+	
 func _try_catch_ones(player_id, cur_card, row, col):
 	var cur_player = gm.get_player(player_id)
 	#var opp_player = gm.get_opponent(player_id)
