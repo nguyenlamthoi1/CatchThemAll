@@ -17,7 +17,8 @@ const GAME_MODE = {
 	AI_RANDOM = 1,
 	AI_MIN_MAX = 2
 }
-
+const AI_THINKING_TIME = 5.0
+const AI_LIMIT_THINKING_TIME = 2.0
 # Card constants
 # stats = [left, top, right, bottom]
 enum {LEVEL_0, LEVEL_1, LEVEL_2}
@@ -71,6 +72,9 @@ var rng = RandomNumberGenerator.new()
 
 func set_game_mode(mode):
 	_game_mode = mode
+	
+func with_ai():
+	return _game_mode != GAME_MODE.PVP
 
 func _ready():
 	rng.randomize()

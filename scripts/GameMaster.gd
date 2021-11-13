@@ -3,6 +3,8 @@ extends Node
 var CardTemp = preload("res://scenes/Card.tscn")
 
 var game_mode = GlobalGame.GAME_MODE.PVP
+var with_AI = false
+
 var _pausing_state_game
 
 var _current_player
@@ -39,8 +41,8 @@ func _ready():
 	print("[Main Game] ready!")
 	rng.randomize()
 	
-	_players[P1].init_player(P1, "Player 1", GlobalGame.GAME_MODE.PVP)
-	_players[P2].init_player(P2, "Player 2", GlobalGame.GAME_MODE.PVP)
+	game_mode = GlobalGame._game_mode
+	_init_game_mode()
 	
 	_deck = []
 	_card_dict = GlobalGame.CARD_DICT
@@ -56,6 +58,19 @@ func _ready():
 	
 	_gui_text.start_show("Start game")
 	#start_game(GlobalGame.GAME_MODE.PVP)
+
+func _init_game_mode():
+	if game_mode == GlobalGame.GAME_MODE.PVP:
+		_players[P1].init_player(P1, "Player 1", GlobalGame.GAME_MODE.PVP, self)
+		_players[P2].init_player(P2, "Player 2", GlobalGame.GAME_MODE.PVP, self)
+		with_AI = false	
+	elif game_mode == GlobalGame.GAME_MODE.AI_RANDOM:
+		_players[P1].init_player(P1, "Player 1", GlobalGame.GAME_MODE.PVP, self)
+		_players[P2].init_player(P2, "AI easy", GlobalGame.GAME_MODE.AI_RANDOM, self)	
+		with_AI = true
+		
+func get_time():
+	return _cur_time		
 
 func _process(delta):
 	if _state_game == GAME_PAUSED:
@@ -88,8 +103,9 @@ func start_game(mode):
 	
 	_prepair_deck()
 	
-	if game_mode == GlobalGame.GAME_MODE.PVP:
-		_start_pvp_game()
+	#if game_mode == GlobalGame.GAME_MODE.PVP:
+		#_start_pvp_game()
+	_start_pvp_game()
 
 func _prepair_deck():
 	var level = GlobalGame.LEVEL_0
@@ -142,11 +158,18 @@ func _start_pvp_game():
 		if !cur_player.is_full_hand():		
 			_do_deal_card(player_id)
 	
-	var random_first_id = str(rng.randi_range(0, 1))
+	#var random_first_id = str(rng.randi_range(0, 1))
+	var random_first_id = "1"
+	
 	_current_player = _players[random_first_id]
 	var next_player = get_opponent(random_first_id)
 	_current_player.enable_turn(true)
 	next_player.enable_turn(false)
+	
+	_cur_time = _max_time_turn
+	if with_AI and _current_player.id == P2: #Ai turn
+		#_current_player.start_thinking()
+		pass
 	
 	var msg = _current_player.name + " go first"
 	_gui_text.start_show(msg)	
@@ -181,6 +204,9 @@ func _switch_turn():
 	# Enable drag card
 	_current_player.enable_turn(true)
 	old_player.enable_turn(false)
+	if with_AI and _current_player.id == P2: #Ai turn
+		#_current_player.start_thinking()
+		pass
 	
 	# Notify
 	var msg = "Turn of\n" + _current_player.name

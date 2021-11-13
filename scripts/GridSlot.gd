@@ -6,7 +6,6 @@ const EFF_TYPE = 100
 const EMPTY_IMG = preload("res://assets/gui/empty_area.png")
 const EFF_IMG = preload("res://assets/gui/effect_area.png")
 
-var holder
 var num_label
 
 var effect_num = 0
@@ -18,6 +17,8 @@ var grid_owner = null
 var _drag_card = null
 
 onready var selected_area = $SelectedArea
+onready var holder = $Holder
+onready var marker = $Marker
 
 var board = null
 
@@ -26,7 +27,7 @@ func init_grid(ef_num, p_type, p_pos):
 	effect_num = ef_num
 	pos = p_pos
 	
-	var holder = $Holder
+	#var holder = $Holder
 	var num_label = $Holder/CenterContainer/Label
 	
 	if type == EMPTY_TYPE:
@@ -44,7 +45,7 @@ func _input(event):
 		if event is InputEventScreenTouch and event.is_pressed():
 			pass
 		elif event is InputEventScreenDrag:
-			var my_rect_pos = get_global_rect()
+			var my_rect_pos = holder.get_global_rect()
 			var contain_point = my_rect_pos.has_point(event.get_position())
 			if _drag_card != null:
 				if contain_point :

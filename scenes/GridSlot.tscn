@@ -25,6 +25,9 @@ margin_right = 32.0
 margin_bottom = 32.0
 texture = ExtResource( 1 )
 expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="CenterContainer" type="CenterContainer" parent="Holder"]
 anchor_right = 1.0
@@ -54,7 +57,7 @@ margin_right = 32.0
 margin_bottom = 32.0
 color = Color( 0.0980392, 0.631373, 0.482353, 0.266667 )
 
+[node name="Marker" type="Position2D" parent="."]
+
 [connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]
 [connection signal="area_exited" from="Area2D" to="." method="_on_Area2D_area_exited"]
-[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
-[connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]

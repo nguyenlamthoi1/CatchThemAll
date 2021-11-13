@@ -12,6 +12,8 @@ const BG_IMG = {
 	"2": preload("res://assets/gui/yellow_background-export.png")
 }
 
+signal arrived
+
 var gm = null
 
 var holdable = false
@@ -78,11 +80,28 @@ func init_card(card_data, owner_id):
 	_bottom.text = str(stats[3])
 	
 	
-func move_from_to(from_pos, to_pos):
+func move_from_to(from_pos, to_pos, notify = false):
 	holdable = false
+	print("do moving: ", str(from_pos), " and ",str(to_pos))
+	global_position = from_pos
 	_tween.interpolate_property(self, "global_position", from_pos, to_pos, 0.8)
 	_tween.start()
+	if notify:
+		print("emit_from_card_owner: ", str(card_owner.id))
+		yield(_tween, "tween_completed")
+		print("emit arrived signal")
+		emit_signal("arrived")
 
+func move_to_board(from_pos, to_pos, notify = false):
+	holdable = false
+	print("do moving: ", str(from_pos), " and ",str(to_pos))
+	global_position = from_pos
+	_tween.interpolate_property(self, "global_position", from_pos, to_pos, 0.8)
+	_tween.start()
+	#if notify:
+		#yield(_tween, "tween_completed")
+		#print("emit arrived signal")
+		#emit_signal("arrived")
 
 func _on_Tween_tween_completed(object, key):
 	holdable = true
@@ -109,6 +128,9 @@ func _on_Area2D_input_event(viewport, event, shape_idx):
 
 
 func _on_TouchScreenButton_pressed():
+	if GlobalGame.with_ai() and card_owner.id == P2:
+		return
+	
 	holding = true
 	last_pos = Vector2(0.0, 0.0)
 	
@@ -118,20 +140,23 @@ func _on_TouchScreenButton_released():
 	if !can_drop:
 		position = last_pos
 	elif !on_slot:
-		# set up ui for card
-		var new_parent = drop_slot
-		get_parent().remove_child(self)
-		new_parent.add_child(self)
-		self.position = Vector2(0,0)
-		unset_can_drop()
-		holding = false
-		on_slot = true
-		# update hand
-		card_owner.hand[idx_in_hand] = null
-		card_owner.hand_num -= 1
-		if card_owner.hand_num < 0: card_owner.hand_num = 0
-		# notify for game_master
-		gm._on_card_drop(card_owner.id, self, pos)
+		on_drop_card()
+	
+func on_drop_card():
+	# set up ui for card
+	var new_parent = drop_slot
+	get_parent().remove_child(self)
+	new_parent.add_child(self)
+	self.position = Vector2(0,0)
+	unset_can_drop()
+	holding = false
+	on_slot = true
+	# update hand
+	card_owner.hand[idx_in_hand] = null
+	card_owner.hand_num -= 1
+	if card_owner.hand_num < 0: card_owner.hand_num = 0
+	# notify for game_master
+	gm._on_card_drop(card_owner.id, self, pos)		
 	
 func _input(event):
 	if holding and !on_slot and card_owner.can_drag_card:
