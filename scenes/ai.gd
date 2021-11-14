@@ -17,13 +17,19 @@ class Slot:
 	var _base_stats = [0, 0, 0, 0]	
 	#var _real_stats = [0, 0, 0, 0]
 	var _owner_id = 0 # 1 -> p1 , 2 -> p2, 0 -> empty
+	var _pos = Vector2(0.0, 0.0)
 	
 	func _init(card_id = -1, base_stats = [0,0,0,0], p_effect_buff = 0, owner_id = 0):
 		_cur_card_id = card_id
 		_base_stats = base_stats
 		_eff_buff = p_effect_buff
 		_owner_id = owner_id
+	
+	func set_position(r, c):
+		_pos = Vector2(r, c)
 		
+	func set_eff_buff(buff):
+		_eff_buff = buff
 	
 	func is_empty():
 		return _owner_id == 0
@@ -37,10 +43,18 @@ class Slot:
 	func get_stat(stat_id):
 		return _base_stats[stat_id] + _eff_buff
 		
-	func add_new_card(card_id, base_stats):
+	func add_new_card(card_id, base_stats, owner_id):
 		if is_empty():
 			_cur_card_id = card_id
 			_base_stats = base_stats
+			_owner_id = owner_id
+			
+	func print_data():
+		var msg = "("
+		msg += str(_cur_card_id) + " , "
+		msg += str(_eff_buff) + " , "		
+		msg += ")"
+		print(str(_pos.x), " - ", str(_pos.y), " : ", msg)
 
 class Hand:
 	var _cards = [] 
@@ -133,7 +147,7 @@ class BoardNode:
 		
 		# try add new card to checking slot
 		var cur_slot = checking_board[row][col] # This is slot		
-		cur_slot = cur_slot.add_new_card(dropped_card_id, dropped_card_base_stats)
+		cur_slot = cur_slot.add_new_card(dropped_card_id, dropped_card_base_stats, player_id)
 		
 		# Try catch others
 		var dir_num = directions.size()

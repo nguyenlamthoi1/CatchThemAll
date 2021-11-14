@@ -49,20 +49,21 @@ func init_player(p_id, p_name, p_mode, gm):
 	
 	if player_mode == GlobalGame.GAME_MODE.PVP:
 		with_ai = false
+		print("creating Player Mode: ", player_name)
 	else:
 		if player_mode == GlobalGame.GAME_MODE.AI_RANDOM:
 			ai_mode = AI_EASY
 			with_ai = true
 			print("creating AI Mode: Easy: ", player_name)
 			
-		elif GlobalGame._game_mode == GlobalGame.GAME_MODE.AI_RANDOM:
+		elif GlobalGame._game_mode == GlobalGame.GAME_MODE.AI_MIN_MAX:
 			ai_mode = AI_HARD
 			with_ai = true
 			print("creating AI Mode: Hard: ", player_name)
 		else:
 			ai_mode = AI_EASY
 			with_ai = true
-			print("creating AI Mode: Easy: ")
+			print("creating AI Mode: Easy: ", player_name)
 			
 
 func draw_card(from_node, card_instance):
@@ -213,7 +214,7 @@ func easy_thinking(player_name):
 	return
 
 func hard_thinking(player_name):
-	print(player_name, " hard thinking...")
+	print(player_name, " start thinking hard way..")
 	
 	var EMPTY_TYPE = 99
 	var EFF_TYPE = 100
@@ -235,13 +236,14 @@ func hard_thinking(player_name):
 		for c in GlobalGame.COLUMNS:
 			var ui_slot = board_ui.get_ui_slot(r, c)
 			var slot
+			var eff_buff = my_eff_board[r][c]
+			
 			if my_data_board[r][c] == EMPTY_TYPE:
 				slot = MaxMinAI.Slot.new()
 			else:
 				var ui_card = board_ui.get_card_at(r, c)				
 				var card_id = ui_card.get_id()
 				var base_stats = ui_card.get_base_stats()
-				var eff_buff = my_eff_board[r][c]
 				
 				var owner_id = 0
 				match ui_card.card_owner.id:
@@ -251,8 +253,18 @@ func hard_thinking(player_name):
 						owner_id = 2
 						
 				slot = MaxMinAI.Slot.new(card_id, base_stats, eff_buff, owner_id)
-				
+			
+			slot.set_position(r, c)	
+			slot.set_eff_buff(eff_buff)
+			
+			slot.print_data()
+			
 			board_state.append(slot)
+	
+	print("finish_thinking!")
+	
+	return
+	
 	# 2. create hand data of 2 players
 	var opp_hand = _gm.get_opponent(id).hand # P1
 	var my_hand = hand # P2
@@ -262,12 +274,11 @@ func hard_thinking(player_name):
 		hands_data[i] = []
 		for hand_idx in 4: # 4 cards in hand
 			var card_node = hands[i][hand_idx]
+			var card_data = {}
 			if card_node != null:
-				var card_data = {}
 				card_data.card_id = card_node.get_id()
 				card_data.base_stats = card_node.get_base_stats()
 			else:
-				var card_data = {}
 				card_data.card_id = -1
 				card_data.base_stats = []
 				
@@ -287,7 +298,8 @@ func hard_thinking(player_name):
 	#var chosen_pos = sol[1]
 				
 
-	do_drop_card_at(rand_hand_id, chosen_pos)
+	#do_drop_card_at(rand_hand_id, chosen_pos)
+	
 	return
 
 func do_drop_card_at(hand_card_id, drop_pos):
@@ -307,5 +319,4 @@ func do_drop_card_at(hand_card_id, drop_pos):
 	drop_card.on_drop_card()
 	
 	drop_card.move_from_to(from_pos, to_pos)
-
 
