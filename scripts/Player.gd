@@ -297,11 +297,17 @@ func hard_thinking(player_name):
 	var p2_hand = 1
 	var board_root_node = MaxMinAI.BoardNode.new(board_state, hands_data[p1_hand], hands_data[p2_hand])
 	
+	#return 
+	
 	# 3. execute ai algorithm
 	var ai_executer = MaxMinAI.new(_gm)
-	#var sol = ai_executer.find_sol(board_root_node)
-	#var max_value = sol[0]
-	#var chosen_pos = sol[1]
+	var p2_type = 2
+	#var p1_type = 1
+	var sol = ai_executer.find_sol(board_root_node, true, p2_type, 0, -INF, INF)
+	var max_value = sol[0]
+	var chosen_pos = sol[1]
+	var chosen_hand_idx = sol[2]
+	print("Found sol: ", str(chosen_pos), " - ", str(chosen_hand_idx))
 				
 
 	#do_drop_card_at(rand_hand_id, chosen_pos)

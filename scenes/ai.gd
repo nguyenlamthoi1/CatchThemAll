@@ -35,7 +35,7 @@ class Slot:
 		return _owner_id == 0
 	
 	func check_owner(owner_id):
-		return _owner_id == owner_id
+		return _owner_id == owner_id or _cur_card_id >= 0
 	
 	func set_owner(owner_id):
 		_owner_id == owner_id
@@ -53,7 +53,8 @@ class Slot:
 		var msg = "("
 		msg += str(_cur_card_id) + " , "
 		#msg += str(_eff_buff) + " , "		
-		msg += str(_base_stats) + " , "		
+		#msg += str(_base_stats) + " , "		
+		msg += str(_owner_id) + " , "
 		
 		msg += ")"
 		print(str(_pos.x), " - ", str(_pos.y), " : ", msg)
@@ -71,7 +72,7 @@ class BoardNode:
 	
 	func is_leaf() -> bool: # full board<-> leaf node
 		var is_full: bool = true
-		for r in GlobalGame.COLOMUNS:
+		for r in GlobalGame.ROWS:
 			for c in GlobalGame.COLOMUNS:
 				var slot =_board_state[r][c]
 				if slot.is_empty():
@@ -82,14 +83,14 @@ class BoardNode:
 	func get_h_value() -> int:
 		var p1_num = 0
 		var p2_num = 0
-		for r in GlobalGame.COLOMUNS:
+		for r in GlobalGame.ROWS:
 			for c in GlobalGame.COLOMUNS:
 				var slot = _board_state[r][c]
 				if  slot.check_owner(P1):
 					p1_num += 1
 				elif slot.check_owner(P2):
 					p2_num += 1
-		var h_value: int = p1_num + p2_num
+		var h_value: int = p2_num - p1_num # P2 start with MAximize
 		return h_value
 	
 	func get_all_next_nodes(player_id):
@@ -101,7 +102,7 @@ class BoardNode:
 		
 		var child_nodes = []
 		var empty_board_pos_arr = []
-		for r in GlobalGame.COLOMUNS:
+		for r in GlobalGame.ROWS:
 			for c in GlobalGame.COLOMUNS:
 				var slot = _board_state[r][c]
 				if slot.is_empty():
@@ -169,11 +170,11 @@ class BoardNode:
 					if can_catch:
 						# update new data
 						adj_slot.update_owner(player_id)
+						
 	func _is_pos_in_range(row, col):
 		var valid_row = 0 <= row and row < GlobalGame.ROWS
 		var valid_col = 0 <= col and col < GlobalGame.COLUMNS
-		return valid_row and valid_col
-			
+		return valid_row and valid_col	
 			
 func _init(gm):
 	_gm = gm			
@@ -193,7 +194,7 @@ func find_sol(board_node: BoardNode, maximize_player:bool, player_id, depth: int
 			pos = children[i][1]
 			chosen_hand_idx = children[i][2]
 			
-			value = max(value, find_sol (child_node, false, _get_opp_id(player_id), depth - 1, alpha, beta))
+			value = max(value, find_sol (child_node, false, _get_opp_id(player_id), depth + 1, alpha, beta))
 			if value >= beta:
 				break
 			alpha = max(alpha, value)
@@ -209,7 +210,7 @@ func find_sol(board_node: BoardNode, maximize_player:bool, player_id, depth: int
 			pos = children[i][1]
 			chosen_hand_idx = children[i][2]
 			
-			value = min(value, find_sol (child_node, true,_get_opp_id(player_id), depth - 1, alpha, beta))
+			value = min(value, find_sol (child_node, true,_get_opp_id(player_id), depth + 1, alpha, beta))
 			if value <= alpha:
 				break
 			beta = min(beta, value)
