@@ -257,21 +257,21 @@ func hard_thinking(player_name):
 			slot.set_position(r, c)	
 			slot.set_eff_buff(eff_buff)
 			
-			slot.print_data()
+			#slot.print_data()
 			
 			board_state.append(slot)
 	
-	print("finish_thinking!")
-	
-	return
+	#print("--")
+	#return
 	
 	# 2. create hand data of 2 players
 	var opp_hand = _gm.get_opponent(id).hand # P1
 	var my_hand = hand # P2
 	var hands = [opp_hand, my_hand]
 	var hands_data = []
+	
 	for i in hands.size():
-		hands_data[i] = []
+		hands_data.append([])
 		for hand_idx in 4: # 4 cards in hand
 			var card_node = hands[i][hand_idx]
 			var card_data = {}
@@ -284,7 +284,13 @@ func hard_thinking(player_name):
 				
 			hands_data[i].append(card_data)	
 	
-			
+	#for i in hands_data.size():
+		#for hand_idx in 4: # 4
+		#	var card_data =  hands_data[i][hand_idx]
+		#	print("i = ", i, ": ", card_data.card_id, ", ", str(card_data.base_stats))
+	
+	#print("--")
+	#return
 	
 	# 2. create board root node
 	var p1_hand = 0
@@ -292,7 +298,7 @@ func hard_thinking(player_name):
 	var board_root_node = MaxMinAI.BoardNode.new(board_state, hands_data[p1_hand], hands_data[p2_hand])
 	
 	# 3. execute ai algorithm
-	#var ai_executer = MaxMinAI.new(_gm)
+	var ai_executer = MaxMinAI.new(_gm)
 	#var sol = ai_executer.find_sol(board_root_node)
 	#var max_value = sol[0]
 	#var chosen_pos = sol[1]

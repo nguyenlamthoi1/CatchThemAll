@@ -52,7 +52,9 @@ class Slot:
 	func print_data():
 		var msg = "("
 		msg += str(_cur_card_id) + " , "
-		msg += str(_eff_buff) + " , "		
+		#msg += str(_eff_buff) + " , "		
+		msg += str(_base_stats) + " , "		
+		
 		msg += ")"
 		print(str(_pos.x), " - ", str(_pos.y), " : ", msg)
 
