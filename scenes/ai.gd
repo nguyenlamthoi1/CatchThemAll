@@ -1,11 +1,13 @@
-
 class_name MaxMinAI
 
 const EMPTY = 0
 const P1 = 1
 const P2 = 2
 
-const MAX_DEPTH = 3
+const P1_HAND = 0
+const P2_HAND = 1
+
+const MAX_DEPTH = 1
 
 var _gm
 
@@ -34,11 +36,21 @@ class Slot:
 		
 	func get_stat(stat_id):
 		return _base_stats[stat_id] + _eff_buff
+		
+	func add_new_card(card_id, base_stats):
+		if is_empty():
+			_cur_card_id = card_id
+			_base_stats = base_stats
+
+class Hand:
+	var _cards = [] 
 
 class BoardNode:
-	var _board_state
+	var _board_state = [] # [<Slot>]
+	var _hands
 	
-	func _init(p_board_state):
+	func _init(p_board_state, p1_hand, p2_hand):
+		_hands = [p1_hand, p2_hand]
 		_board_state = p_board_state
 	
 	func is_leaf() -> bool: # full board<-> leaf node
@@ -65,6 +77,12 @@ class BoardNode:
 		return h_value
 	
 	func get_all_next_nodes(player_id):
+		var player_hand = _hands[P1_HAND] if player_id == P1 else _hands[P2_HAND]
+		#player_hand = player_hand.duplicate(true)
+		
+		var opp_hand  = _hands[P1_HAND] if player_id == P1 else _hands[P2_HAND]
+		opp_hand = opp_hand.duplicate(true)
+		
 		var child_nodes = []
 		var empty_board_pos_arr = []
 		for r in GlobalGame.COLOMUNS:
@@ -73,17 +91,35 @@ class BoardNode:
 				if slot.is_empty():
 					empty_board_pos_arr.append([r,c])
 		for i in empty_board_pos_arr.size():
-			var checking_board  = _board_state.duplicate(true)
-			var r = empty_board_pos_arr[i][0]
-			var c = empty_board_pos_arr[i][1]
-			var chosen_slot = checking_board[r][c]
-			chosen_slot.set_owner(player_id)
-			_try_catch_others(checking_board, player_id, r, c)
-			var child_node = BoardNode.new(checking_board)
-			child_nodes.append([child_node, [r, c]])
+			for hand_idx in 4:
+				var checking_board  = _board_state.duplicate(true)
+				var card_data = player_hand[hand_idx]
+				
+				var r = empty_board_pos_arr[i][0]
+				var c = empty_board_pos_arr[i][1]
+				var chosen_slot = checking_board[r][c]
+				chosen_slot.set_owner(player_id)
+				
+				_try_catch_others(checking_board, card_data, player_id, r, c)
+				
+				# removing dropped card
+				var new_player_hand = player_hand.duplicate(true)
+				new_player_hand.remove(hand_idx)
+				
+				# create child node with data of new board and new player_hand
+				var child_node
+				if player_id == P1:
+				 child_node = BoardNode.new(checking_board, new_player_hand, opp_hand)
+				elif player_id == P2:
+				 child_node = BoardNode.new(checking_board, opp_hand, new_player_hand)
+	
+				var chosen_hand_idx = hand_idx
+	
+				child_nodes.append([child_node, [r, c], chosen_hand_idx])
+			
 		return child_nodes
 	
-	func _try_catch_others(checking_board, player_id, row, col):
+	func _try_catch_others(checking_board, card_data, player_id, row, col):
 		var left = GlobalGame.LEFT
 		var right =  GlobalGame.RIGHT
 		var top = GlobalGame.TOP
@@ -92,7 +128,13 @@ class BoardNode:
 		var check_pairs_stats = [[right, left], [bottom, top], [left, right], [top, bottom]]
 		var directions = [[0, -1], [-1, 0], [0, 1], [1, 0]]
 		
+		var dropped_card_id = card_data.card_id
+		var dropped_card_base_stats = card_data.base_stats
+		
+		# try add new card to checking slot
 		var cur_slot = checking_board[row][col] # This is slot		
+		cur_slot = cur_slot.add_new_card(dropped_card_id, dropped_card_base_stats)
+		
 		# Try catch others
 		var dir_num = directions.size()
 		for i in range(dir_num):
@@ -127,11 +169,14 @@ func find_sol(board_node: BoardNode, maximize_player:bool, player_id, depth: int
 	if maximize_player:
 		var value = -INF
 		var pos = null
+		var chosen_hand_idx = -1
 		
 		var children = board_node.get_all_next_nodes(player_id)
 		for i in children.size():
 			var child_node = children[i][0]
 			pos = children[i][1]
+			chosen_hand_idx = children[i][2]
+			
 			value = max(value, find_sol (child_node, false, _get_opp_id(player_id), depth - 1, alpha, beta))
 			if value >= beta:
 				break
@@ -140,11 +185,14 @@ func find_sol(board_node: BoardNode, maximize_player:bool, player_id, depth: int
 	else:
 		var value = INF
 		var pos = null
+		var chosen_hand_idx = -1		
 		
 		var children = board_node.get_all_next_nodes(player_id)
 		for i in children.size():
 			var child_node = children[i][0]
 			pos = children[i][1]
+			chosen_hand_idx = children[i][2]
+			
 			value = min(value, find_sol (child_node, true,_get_opp_id(player_id), depth - 1, alpha, beta))
 			if value <= alpha:
 				break

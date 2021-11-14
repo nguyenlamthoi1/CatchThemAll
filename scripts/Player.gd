@@ -165,7 +165,8 @@ func start_thinking():
 			#easy_thinking(player_name)
 			#thread.start(self, "hard_thinking", player_name)
 		if ai_mode == AI_HARD:
-			thread.start(self, "hard_thinking", player_name)
+			#thread.start(self, "hard_thinking", player_name)
+			hard_thinking("")
 func easy_thinking(player_name):
 	print(player_name, " easy thinking...")
 	
@@ -252,17 +253,41 @@ func hard_thinking(player_name):
 				slot = MaxMinAI.Slot.new(card_id, base_stats, eff_buff, owner_id)
 				
 			board_state.append(slot)
+	# 2. create hand data of 2 players
+	var opp_hand = _gm.get_opponent(id).hand # P1
+	var my_hand = hand # P2
+	var hands = [opp_hand, my_hand]
+	var hands_data = []
+	for i in hands.size():
+		hands_data[i] = []
+		for hand_idx in 4: # 4 cards in hand
+			var card_node = hands[i][hand_idx]
+			if card_node != null:
+				var card_data = {}
+				card_data.card_id = card_node.get_id()
+				card_data.base_stats = card_node.get_base_stats()
+			else:
+				var card_data = {}
+				card_data.card_id = -1
+				card_data.base_stats = []
+				
+			hands_data[i].append(card_data)	
+	
+			
+	
 	# 2. create board root node
-	var board_root_node = MaxMinAI.BoardNode.new(board_state)
+	var p1_hand = 0
+	var p2_hand = 1
+	var board_root_node = MaxMinAI.BoardNode.new(board_state, hands_data[p1_hand], hands_data[p2_hand])
 	
 	# 3. execute ai algorithm
-	var ai_executer = MaxMinAI.new(_gm)
-	var sol = ai_executer.find_sol(board_root_node)
-	var chosen_pos = sol[0]
-	var max_value = sol[1]
+	#var ai_executer = MaxMinAI.new(_gm)
+	#var sol = ai_executer.find_sol(board_root_node)
+	#var max_value = sol[0]
+	#var chosen_pos = sol[1]
 				
 
-	do_drop_card_at(rand_hand_id, sol_pos)
+	do_drop_card_at(rand_hand_id, chosen_pos)
 	return
 
 func do_drop_card_at(hand_card_id, drop_pos):
