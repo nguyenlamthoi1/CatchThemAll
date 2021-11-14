@@ -56,6 +56,11 @@ func _ready():
 	
 	_state_game = GAME_READY
 	
+	_prepair_deck()
+	
+	_prepair_first_cards(P1)
+	_prepair_first_cards(P2)
+	
 	_gui_text.start_show("Start game")
 	#start_game(GlobalGame.GAME_MODE.PVP)
 
@@ -105,7 +110,7 @@ func _process(delta):
 func start_game(mode):
 	game_mode = mode
 	
-	_prepair_deck()
+	#_prepair_deck()
 	
 	#if game_mode == GlobalGame.GAME_MODE.PVP:
 		#_start_pvp_game()
@@ -179,6 +184,19 @@ func _start_pvp_game():
 	_gui_text.start_show(msg)	
 	_state_game = GAME_RUN
 	
+func _prepair_first_cards(player_id):
+	var cur_player = _players[player_id]
+	if cur_player.is_full_hand():
+		return
+		
+	# create new card
+	for i in GlobalGame.MAX_HAND_CARD - 1: # 3 first cards
+		var drawn_card_data = _deck.pop_back()
+		var new_card = CardTemp.instance()
+		new_card.gm = self
+		new_card.init_card(drawn_card_data, player_id)
+
+		cur_player.draw_card(_draw_pos, new_card, false) # no emit signal when card arrived
 	
 func _do_deal_card(player_id):
 	var cur_player = _players[player_id]
@@ -186,11 +204,13 @@ func _do_deal_card(player_id):
 		return
 		
 	# create new card
+
 	var drawn_card_data = _deck.pop_back()
 	var new_card = CardTemp.instance()
 	new_card.gm = self
 	new_card.init_card(drawn_card_data, player_id)
-	cur_player.draw_card(_draw_pos, new_card)
+		
+	cur_player.draw_card(_draw_pos, new_card, true)
 	
 func _switch_turn():
 	#print("test curret: ", _current_player.id, "- ", P1, " - ", P2)
@@ -221,9 +241,10 @@ func _switch_turn():
 	if _deck.size() - 1 > 0:
 		_do_deal_card(new_turn_id)
 	else:
+		if with_AI and _current_player.id == P2: #Ai turn
+			_current_player.start_thinking()
 		#print("Game over: out of deck")		
 		#_do_over_state()
-		pass
 
 func _on_card_drop(player_id, drop_card, pos):
 	# do drop card on board

@@ -82,14 +82,14 @@ func init_card(card_data, owner_id):
 	
 func move_from_to(from_pos, to_pos, notify = false):
 	holdable = false
-	print("do moving: ", str(from_pos), " and ",str(to_pos))
+	#print("do moving: ", str(from_pos), " and ",str(to_pos))
 	global_position = from_pos
 	_tween.interpolate_property(self, "global_position", from_pos, to_pos, 0.8)
 	_tween.start()
 	if notify:
-		print("emit_from_card_owner: ", str(card_owner.id))
+		#print("emit_from_card_owner: ", str(card_owner.id))
 		yield(_tween, "tween_completed")
-		print("emit arrived signal")
+		#print("emit arrived signal")
 		emit_signal("arrived")
 
 func move_to_board(from_pos, to_pos, notify = false):

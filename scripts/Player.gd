@@ -66,7 +66,7 @@ func init_player(p_id, p_name, p_mode, gm):
 			print("creating AI Mode: Easy: ", player_name)
 			
 
-func draw_card(from_node, card_instance):
+func draw_card(from_node, card_instance, notify = true):
 	#var empty_slot = _get_first_empty_slot_2()
 	#if empty_slot == null:
 	#	return
@@ -82,6 +82,11 @@ func draw_card(from_node, card_instance):
 	hand[found_empty_idx] = card_instance
 	hand_num += 1
 	#card_instance.global_position = empty_slot.global_position
+	
+	if !notify:
+		card_instance.move_from_to(from_node.global_position , empty_slot.rect_global_position)
+		return
+	
 	if with_ai:
 		card_instance.connect("arrived", self, "start_thinking")
 		card_instance.move_from_to(from_node.global_position , empty_slot.rect_global_position, true)
@@ -195,9 +200,9 @@ func easy_thinking(player_name):
 	
 	
 	var rand_hand_id  =rng.randi_range(0, hand_array.size() - 1)
-	#print(player_name, " make decision! at")	
+	print(player_name, " make decision! at")	
 	#do_drop_card_at(hand_array[rand_hand_id], sol_pos)
-	
+	#return
 	# while true if want to wait 3s
 	while true:
 		#
@@ -214,7 +219,7 @@ func easy_thinking(player_name):
 	return
 
 func hard_thinking(player_name):
-	print(player_name, " start thinking hard way..")
+	print(player_name, "..start thinking hard way..")
 	
 	var EMPTY_TYPE = 99
 	var EFF_TYPE = 100
@@ -233,6 +238,7 @@ func hard_thinking(player_name):
 	# 1. create board_state = [ <Slot> ]
 	var board_state = []
 	for r in GlobalGame.ROWS:
+		board_state.append([])
 		for c in GlobalGame.COLUMNS:
 			var ui_slot = board_ui.get_ui_slot(r, c)
 			var slot
@@ -259,7 +265,7 @@ func hard_thinking(player_name):
 			
 			#slot.print_data()
 			
-			board_state.append(slot)
+			board_state[r].append(slot)
 	
 	#print("--")
 	#return
@@ -297,20 +303,19 @@ func hard_thinking(player_name):
 	var p2_hand = 1
 	var board_root_node = MaxMinAI.BoardNode.new(board_state, hands_data[p1_hand], hands_data[p2_hand])
 	
-	#return 
-	
 	# 3. execute ai algorithm
 	var ai_executer = MaxMinAI.new(_gm)
 	var p2_type = 2
 	#var p1_type = 1
-	var sol = ai_executer.find_sol(board_root_node, true, p2_type, 0, -INF, INF)
+	var sol = ai_executer.find_sol(board_root_node, true, p2_type, 0, -1000, 1000)
+	return
 	var max_value = sol[0]
 	var chosen_pos = sol[1]
 	var chosen_hand_idx = sol[2]
 	print("Found sol: ", str(chosen_pos), " - ", str(chosen_hand_idx))
 				
 
-	#do_drop_card_at(rand_hand_id, chosen_pos)
+	do_drop_card_at(chosen_hand_idx, chosen_pos)
 	
 	return
 

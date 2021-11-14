@@ -173,7 +173,9 @@ func is_full():
 			break
 			
 	#for test
+	
 	var str_r = ""
+	row_num = 0
 	for r in range(row_num):
 		str_r = ""
 		for c in range(col_num) :
@@ -187,8 +189,10 @@ func is_full():
 			str_r += " " + ch
 		print(str(r), " : ", str_r)
 		
-	var msg = "BOARD is FULL" if is_full else "BOARD not FULL"
-	print(msg)		
+	#var msg = "BOARD is FULL" if is_full else "BOARD not FULL"
+	#print(msg)		
+	print("--end--")
+	
 	#--
 	
 	return is_full		
