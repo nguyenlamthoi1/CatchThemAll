@@ -32,7 +32,7 @@ class Slot:
 		_eff_buff = buff
 	
 	func is_empty():
-		return _owner_id == 0 or _cur_card_id >= 0
+		return _owner_id == 0 or _cur_card_id < 0
 	
 	func check_owner(owner_id):
 		return _owner_id == owner_id 
@@ -185,8 +185,7 @@ class BoardNode:
 					child_node = BoardNode.new(checking_board, opp_hand, new_player_hand)
 	
 				var chosen_hand_idx = hand_idx
-				if player_id == P1 and checking_board[0][0].check_owner(P2):
-					pass
+				
 					#print("---child_node: ", str(r), ",", str(c))
 					#child_node.print_data()
 				
@@ -208,7 +207,7 @@ class BoardNode:
 		
 		# try add new card to checking slot
 		var cur_slot = checking_board[row][col] # This is slot		
-		cur_slot = cur_slot.add_new_card(dropped_card_id, dropped_card_base_stats, player_id)
+		cur_slot.add_new_card(dropped_card_id, dropped_card_base_stats, player_id)
 		
 		# Try catch others
 		var dir_num = directions.size()
@@ -220,15 +219,20 @@ class BoardNode:
 			
 			# Check if it a valid adjacent position		
 			if _is_pos_in_range(adj_row, adj_col):
+				#print("check _ true: ", str(adj_row), " , ", str(adj_col))
 				var adj_slot = checking_board[adj_row][adj_col]
 				if !adj_slot.is_empty() and !adj_slot.check_owner(player_id):
 					var adj_stat = check_pairs_stats[i][0]
 					var cur_stat = check_pairs_stats[i][1]
 					var can_catch = adj_slot.get_stat(adj_stat) < cur_slot.get_stat(cur_stat)
+					#print('compare: ', str(adj_slot.get_stat(adj_stat)), " vs ",cur_slot.get_stat(adj_stat) )
 					if can_catch:
 						# update new data
-						adj_slot.update_owner(player_id)
-						print("can_catch")
+						adj_slot.set_owner(player_id)
+						#print("can_catch")
+			else:
+				pass
+				#print("check _ false: ", str(adj_row), " , ", str(adj_col))
 						
 	func _is_pos_in_range(row, col):
 		var valid_row = 0 <= row and row < GlobalGame.ROWS
@@ -242,7 +246,7 @@ func find_sol(board_node: BoardNode, maximize_player:bool, player_id, depth: int
 	if board_node.is_leaf() or depth == MAX_DEPTH:
 		#.. or _gm.get_time() < GlobalGame.PLAYER_TURN_TIME - 3.0
 		var hvalue = board_node.get_h_value()
-		#print("-----value: ", str(hvalue))
+		print("-----value: ", str(hvalue))
 		return [hvalue]
 	if maximize_player:
 		#var value = -INF

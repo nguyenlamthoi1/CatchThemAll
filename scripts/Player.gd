@@ -308,7 +308,7 @@ func hard_thinking(player_name):
 	var p2_type = 2
 	#var p1_type = 1
 	var sol = ai_executer.find_sol(board_root_node, true, p2_type, 0, -1000, 1000)
-	return
+
 	var max_value = sol[0]
 	var chosen_pos = sol[1]
 	var chosen_hand_idx = sol[2]
