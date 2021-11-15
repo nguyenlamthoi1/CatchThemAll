@@ -22,7 +22,7 @@ _global_script_class_icons={
 
 config/name="Catch Them All"
 run/main_scene="res://welcome_scene.tscn"
-config/icon="res://icon.png"
+config/icon="res://assets/pokeball.png"
 
 [autoload]
 

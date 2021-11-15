@@ -7,7 +7,7 @@ const P2 = 2
 const P1_HAND = 0
 const P2_HAND = 1
 
-const MAX_DEPTH = 2
+const MAX_DEPTH = 5
 
 var _gm
 
@@ -223,7 +223,7 @@ func _init(gm):
 	_gm = gm			
 			
 func find_sol(board_node: BoardNode, maximize_player:bool, player_id, depth: int, alpha: int, beta: int):
-	if board_node.is_leaf() or depth == MAX_DEPTH:
+	if board_node.is_leaf() or depth == MAX_DEPTH  or _gm.get_time() < GlobalGame.PLAYER_TURN_TIME - 3.0:
 		#.. or _gm.get_time() < GlobalGame.PLAYER_TURN_TIME - 3.0
 		var hvalue = board_node.get_h_value()
 		return [hvalue]

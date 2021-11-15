@@ -171,10 +171,10 @@ func start_thinking():
 			#easy_thinking(player_name)
 			#thread.start(self, "hard_thinking", player_name)
 		if ai_mode == AI_HARD:
-			#thread.start(self, "hard_thinking", player_name)
-			hard_thinking("")
+			thread.start(self, "hard_thinking", player_name)
+			#hard_thinking("")
 func easy_thinking(player_name):
-	print(player_name, " easy thinking...")
+	#print(player_name, " easy thinking...")
 	
 	var EMPTY_TYPE = 99
 	var EFF_TYPE = 100
@@ -200,7 +200,7 @@ func easy_thinking(player_name):
 	
 	
 	var rand_hand_id  =rng.randi_range(0, hand_array.size() - 1)
-	print(player_name, " make decision! at")	
+	#print(player_name, " make decision! at")	
 	#do_drop_card_at(hand_array[rand_hand_id], sol_pos)
 	#return
 	# while true if want to wait 3s
@@ -219,7 +219,7 @@ func easy_thinking(player_name):
 	return
 
 func hard_thinking(player_name):
-	print(player_name, "..start thinking hard way..")
+	#print(player_name, "..start thinking hard way..")
 	
 	var EMPTY_TYPE = 99
 	var EFF_TYPE = 100
@@ -312,7 +312,7 @@ func hard_thinking(player_name):
 	var max_value = sol[0]
 	var chosen_pos = sol[1]
 	var chosen_hand_idx = sol[2]
-	print("Found sol: ", str(chosen_pos), " - ", str(chosen_hand_idx))
+	#print("Found sol: ", str(chosen_pos), " - ", str(chosen_hand_idx))
 				
 
 	do_drop_card_at(chosen_hand_idx, chosen_pos)
@@ -320,7 +320,7 @@ func hard_thinking(player_name):
 	return
 
 func do_drop_card_at(hand_card_id, drop_pos):
-	print("do drop: ", hand_card_id, " at ", str(drop_pos[0], " , " , str(drop_pos[1])))
+	#print("do drop: ", hand_card_id, " at ", str(drop_pos[0], " , " , str(drop_pos[1])))
 	var r = drop_pos[0]
 	var c = drop_pos[1]
 	

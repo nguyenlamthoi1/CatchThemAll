@@ -70,7 +70,7 @@ func on_card_drop(player_id, cur_card, pos):
 	var col = pos.y
 	var cur_player = gm.get_player(player_id)
 	
-	print("[Board] ", str(player_id), " dropped at ", " : ", str(row), " , ",str(col))
+	#print("[Board] ", str(player_id), " dropped at ", " : ", str(row), " , ",str(col))
 	
 	# Get grid slot at pos
 	var cur_slot = ui_board[row][col] # This is slot
@@ -89,7 +89,7 @@ func on_card_drop(player_id, cur_card, pos):
 	
 	# find and catch adjacent cards
 	_try_catch_ones(player_id, cur_card, row, col)
-	print("new score: P1: ", player_scores[P1], " - P2: ", player_scores[P2])
+	#print("new score: P1: ", player_scores[P1], " - P2: ", player_scores[P2])
 	
 	
 	# Update score ui
@@ -171,29 +171,6 @@ func is_full():
 				break
 		if !is_full:
 			break
-			
-	#for test
-	
-	var str_r = ""
-	row_num = 0
-	for r in range(row_num):
-		str_r = ""
-		for c in range(col_num) :
-			var ch = ""
-			if data_board[r][c] == EMPTY_TYPE:
-				ch = "_"
-			elif data_board[r][c] == P1_TYPE:
-				ch = "1"
-			elif data_board[r][c] == P2_TYPE:
-				ch = "2"				
-			str_r += " " + ch
-		print(str(r), " : ", str_r)
-		
-	#var msg = "BOARD is FULL" if is_full else "BOARD not FULL"
-	#print(msg)		
-	print("--end--")
-	
-	#--
 	
 	return is_full		
 	
